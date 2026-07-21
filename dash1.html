@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE · select model</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <div class="top">
+    <div class="brand">F<span class="o">O</span>RGE</div>
+    <div class="crumb">splash → <b>dash 1 · model select</b> → dash 2</div>
+    <div class="spacer"></div>
+    <a class="backlink" href="index.html">↩ splash</a>
+  </div>
+
+  <div class="select-wrap">
+    <div class="select-eye">dash 1 — first selection event</div>
+    <div class="select-title">SELECT A MODEL</div>
+
+    <div class="plate-row" id="plates"></div>
+
+    <div class="select-hint"><b>◀ ▶</b> toggle &nbsp;·&nbsp; <b>enter</b> select &nbsp;·&nbsp; or click a plate</div>
+  </div>
+
+<script src="assets/js/stub.js"></script>
+<script>
+(() => {
+  "use strict";
+  const order = ["llp", "genre", "phonon", "tutorial"];
+  const row = document.getElementById("plates");
+  let sel = 1;
+
+  order.forEach((k, i) => {
+    const m = FORGE_STUB.MODELS[k];
+    const p = document.createElement("div");
+    p.className = "plate";
+    p.style.setProperty("--pc", m.accent);
+    p.innerHTML = `<span class="pn">0${i + 1}</span><span class="pt">${m.name}</span><span class="ps">${m.sub}</span>`;
+    p.addEventListener("click", () => go(k));
+    p.addEventListener("mouseenter", () => { sel = i; paint(); });
+    row.appendChild(p);
+  });
+
+  const plates = [...row.children];
+  function paint() { plates.forEach((p, i) => p.classList.toggle("sel", i === sel)); }
+  function go(k) { location.href = `dash2.html?model=${k}`; }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { sel = (sel + 1) % order.length; paint(); }
+    if (e.key === "ArrowLeft")  { sel = (sel + order.length - 1) % order.length; paint(); }
+    if (e.key === "Enter") go(order[sel]);
+  });
+  paint();
+})();
+</script>
+</body>
+</html>

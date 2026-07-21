@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE · audit</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <div class="top">
+    <div class="brand">F<span class="o">O</span>RGE</div>
+    <div class="crumb">forge dashboard → <b>audit</b> (new tab)</div>
+    <div class="spacer"></div>
+  </div>
+  <div class="doc">
+    <div class="eye">forge audit — everything learned about this model</div>
+    <h1 id="t">—<span class="stub-tag">stub</span></h1>
+    <div class="sub" id="s">compiled from the four tenets · downloadable</div>
+    <div class="card"><div class="kick">G1 · posterior</div>
+      <ul><li>data-determined share at τ, eigenspectrum split, τ-sweep curve</li></ul></div>
+    <div class="card"><div class="kick">G2 · data·frac</div>
+      <ul><li>sweep table σ̄(f), marginal gain per doubling, verdict: data-limited?</li></ul></div>
+    <div class="card"><div class="kick">G3 · hmc</div>
+      <ul><li>chain diagnostics (R̂, ESS, divergences), LLLA↔HMC agreement, overlay figures</li></ul></div>
+    <div class="card"><div class="kick">G4 · attribution</div>
+      <ul><li>dσ/dφ table, top-k input focus, per-example starved/anchored picks</li></ul></div>
+    <div class="card"><div class="kick">bundle & provenance</div>
+      <ul><li>contract tiers shipped, φ/y alignment check, capabilities, metrics card</li></ul></div>
+    <button class="btn" id="btn-audit" style="margin-top:8px">⬇ download audit (stub)</button>
+  </div>
+<script src="assets/js/stub.js"></script>
+<script>
+(() => {
+  "use strict";
+  const M = FORGE_STUB.modelFromQuery();
+  document.documentElement.style.setProperty("--ac", M.accent);
+  document.getElementById("t").firstChild.textContent = "AUDIT · " + M.name;
+  document.getElementById("btn-audit").addEventListener("click", function () {
+    this.textContent = "⬇ (stub — wiring comes later)";
+  });
+})();
+</script>
+</body>
+</html>

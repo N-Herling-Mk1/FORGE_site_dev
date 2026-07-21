@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE · dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <div class="top">
+    <div class="brand">F<span class="o">O</span>RGE</div>
+    <div class="crumb">dash 2 → <b>forge · main dashboard</b></div>
+    <div class="spacer"></div>
+    <a class="backlink" id="back2" href="dash2.html">↩ mode select</a>
+  </div>
+
+  <div class="dash">
+
+    <!-- ── model loaded ─────────────────────────────────────── -->
+    <section class="panel" id="p-model">
+      <div class="ph"><span class="dot"></span>model loaded</div>
+      <div class="body">
+        <div class="eyebrow">bundle · tier 0/1 verified</div>
+        <div class="mname" id="mname">—</div>
+        <div class="msub" id="msub">—</div>
+        <div class="leds">
+          <span><i class="led-on"></i>φ / y</span>
+          <span><i class="led-on"></i>ggn_eig</span>
+          <span><i class="led-warm"></i>hmc</span>
+          <span><i class="led-off"></i>attrib</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── gauges G1–G4 ─────────────────────────────────────── -->
+    <section class="panel" id="p-gauges">
+      <div class="ph"><span class="dot"></span>the four tenets — condensed
+        <span class="spacer"></span><span style="letter-spacing:.14em">click a gauge → its graph + legend</span>
+      </div>
+      <div class="cluster" id="cluster"></div>
+    </section>
+
+    <!-- ── console: alerts / model data / gauge legend / graph map ── -->
+    <section class="panel" id="p-console">
+      <div class="ph"><span class="dot"></span>console</div>
+      <div class="body">
+        <div class="con-sec"><div class="kick">user text alerts</div><div id="alerts"></div></div>
+        <div class="con-sec"><div class="kick">model data</div>
+          <dl class="kv" id="mdata"></dl>
+        </div>
+        <div class="con-sec"><div class="kick">gauges — what each one means</div>
+          <div class="glegend" id="glegend"></div>
+        </div>
+        <div class="con-sec"><div class="kick">graph map</div>
+          <div class="gmap" id="gmap"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── graphs ───────────────────────────────────────────── -->
+    <section class="panel" id="p-graphs">
+      <div class="ph">
+        <span class="dot"></span>graphs
+        <span class="spacer"></span>
+        <span class="gtoggle">
+          <button id="g-prev" title="previous graph">◀</button>
+          <span class="gtitle" id="gtitle">—</span>
+          <button id="g-next" title="next graph">▶</button>
+        </span>
+        <span class="spacer"></span>
+        <button id="btn-expand" title="expand current">◯</button>
+      </div>
+      <div class="stage"><canvas id="graph-canvas"></canvas></div>
+    </section>
+
+    <!-- ── user controls ────────────────────────────────────── -->
+    <section class="panel" id="p-controls">
+      <div class="ph"><span class="dot"></span>user controls — all adjustable quantities</div>
+      <div class="body">
+        <div class="ctl"><label>τ · prior precision <b id="tau-v">1.00</b></label>
+          <input type="range" id="tau" min="-1" max="1" step="0.01" value="0"></div>
+        <div class="ctl"><label>data fraction <b id="frac-v">100%</b></label>
+          <input type="range" id="frac" min="5" max="100" step="1" value="100"></div>
+        <div class="ctl"><label>mc samples <b id="mc-v">200</b></label>
+          <input type="range" id="mc" min="20" max="1000" step="20" value="200"></div>
+        <div class="ctl"><label>example</label>
+          <div class="picker">
+            <button id="ex-prev">◀</button><span class="val" id="ex-v">#0007 · most-starved</span><button id="ex-next">▶</button>
+          </div>
+        </div>
+        <div class="spacer"></div>
+        <button class="btn" id="btn-hmc">run full hmc</button>
+        <button class="btn" id="btn-audit">generate audit ↗</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- expand popup -->
+  <div id="overlay">
+    <div class="box">
+      <div class="ph"><span class="dot"></span><span id="ov-title">—</span>
+        <span class="spacer"></span><button id="ov-close" title="close">✕</button></div>
+      <canvas id="ov-canvas"></canvas>
+    </div>
+  </div>
+
+<script src="assets/js/stub.js"></script>
+<script src="assets/js/gauges.js"></script>
+<script>
+(() => {
+  "use strict";
+  const M = FORGE_STUB.modelFromQuery();
+  document.documentElement.style.setProperty("--pc", M.accent);
+  document.title = `FORGE · ${M.name}`;
+  document.getElementById("back2").href = `dash2.html?model=${M.key}`;
+  document.getElementById("mname").textContent = M.name;
+  document.getElementById("msub").textContent  = `${M.sub} · ${M.family}`;
+
+  // ---- shared stub state the controls push around ----
+  const st = { tau: 1.0, frac: 1.0, mc: 200, ex: 7 };
+
+  // ---- model data ----
+  const mdata = document.getElementById("mdata");
+  const rows = [["model", M.name], ["family", M.family], ["likelihood", M.likelihood],
+                ["n_train", M.n], ["φ dim", M.d], ["τ", M.tau], ["bundle", "tier 0/1 · verified"]];
+  mdata.innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
+
+  // ---- alerts ----
+  const feed = FORGE_STUB.startAlerts(document.getElementById("alerts"));
+
+  // ---- gauges: the four tenets, condensed ----
+  const GDEFS = [
+    { id: "G1", name: "posterior", unit: "% data-det", accent: "#2DD4FF", min: 0, max: 100, value: 12,
+      legend: "share of posterior directions the DATA pins down at this τ — low needle = prior-led = data-limited.",
+      zones: [{ from: 0, to: 20, color: "#FF4D1F" }, { from: 20, to: 60, color: "#FFC857" }, { from: 60, to: 100, color: "#2DD4FF" }],
+      graph: "posterior" },
+    { id: "G2", name: "data·frac", unit: "% gain / 2×", accent: "#FFC857", min: 0, max: 60, value: 34,
+      legend: "how much σ would tighten per DOUBLING of data (sweep slope) — high needle = feed it more data.",
+      zones: [{ from: 0, to: 12, color: "#2DD4FF" }, { from: 12, to: 32, color: "#FFC857" }, { from: 32, to: 60, color: "#FF4D1F" }],
+      graph: "sweep" },
+    { id: "G3", name: "hmc", unit: "% fidelity", accent: "#FF7A0D", min: 80, max: 100, value: 96.4,
+      legend: "LLLA ↔ HMC agreement (R̂-gated) — high needle = the fast path is telling the truth.",
+      zones: [{ from: 80, to: 90, color: "#FF4D1F" }, { from: 90, to: 96, color: "#FFC857" }, { from: 96, to: 100, color: "#37E08B" }],
+      graph: "hmctrace" },
+    { id: "G4", name: "attrib", unit: "% top-5 focus", accent: "#FF2D7A", min: 0, max: 100, value: 61,
+      legend: "how concentrated dσ/dφ is in the top-5 inputs — high needle = uncertainty is localized, actionable.",
+      zones: [{ from: 0, to: 35, color: "#767c89", alpha: 0.5 }, { from: 35, to: 100, color: "#FF2D7A" }],
+      graph: "confusion" },
+  ];
+  const cluster = document.getElementById("cluster");
+  const gauges = {};
+  GDEFS.forEach((g) => {
+    const el = document.createElement("div");
+    el.className = "gauge live"; el.dataset.g = g.id;
+    cluster.appendChild(el);
+    gauges[g.id] = FORGE_GAUGES.makeGauge(el, g);
+    el.addEventListener("click", () => { showGraphByKey(g.graph); flashLegend(g.id); });
+  });
+
+  // ---- gauge legend (the "more information" box) ----
+  const gl = document.getElementById("glegend");
+  gl.innerHTML = GDEFS.map((g) =>
+    `<div class="row" data-g="${g.id}" style="--ac:${g.accent}">
+       <span class="chip">${g.id}</span>
+       <span><span class="gt">${g.name.toUpperCase()}</span> · <span class="gd">${g.legend}</span></span>
+     </div>`).join("");
+  gl.querySelectorAll(".row").forEach((r) => {
+    r.addEventListener("click", () => {
+      const g = GDEFS.find((x) => x.id === r.dataset.g);
+      showGraphByKey(g.graph); flashLegend(g.id);
+    });
+  });
+  function flashLegend(id) {
+    gl.querySelectorAll(".row").forEach((r) => r.classList.toggle("hot", r.dataset.g === id));
+    setTimeout(() => gl.querySelectorAll(".row").forEach((r) => r.classList.remove("hot")), 1800);
+  }
+
+  // ---- graphs: stage + map + toggle + expand ----
+  const G = FORGE_STUB.GRAPHS;
+  let cur = 0;
+  const cv = document.getElementById("graph-canvas"), cx = cv.getContext("2d");
+  const gtitle = document.getElementById("gtitle");
+  const gmap = document.getElementById("gmap");
+  gmap.innerHTML = G.map((g, i) =>
+    `<div class="g" data-i="${i}"><span class="idx">0${i + 1}</span>${g.title}
+       <span style="margin-left:auto;color:var(--ink-faint);font-size:9px">${g.gauge}</span></div>`).join("");
+  gmap.querySelectorAll(".g").forEach((el) =>
+    el.addEventListener("click", () => showGraph(+el.dataset.i)));
+
+  function fit(canvas) {
+    const r = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.max(300, r.width * dpr); canvas.height = Math.max(200, r.height * dpr);
+    const c = canvas.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    return [r.width, r.height];
+  }
+  function draw() {
+    const [W, H] = fit(cv);
+    G[cur].draw(cx, W, H, M, st);
+    gtitle.textContent = `${G[cur].title} · ${G[cur].gauge}`;
+    gmap.querySelectorAll(".g").forEach((el, i) => {
+      el.classList.toggle("cur", i === cur);
+      el.style.setProperty("--ac", M.accent);
+    });
+    if (overlay.classList.contains("on")) drawOverlay();
+  }
+  function showGraph(i) { cur = (i + G.length) % G.length; draw(); }
+  function showGraphByKey(k) { showGraph(G.findIndex((g) => g.key === k)); }
+  document.getElementById("g-prev").addEventListener("click", () => showGraph(cur - 1));
+  document.getElementById("g-next").addEventListener("click", () => showGraph(cur + 1));
+
+  // expand popup
+  const overlay = document.getElementById("overlay");
+  const ov = document.getElementById("ov-canvas"), ovx = ov.getContext("2d");
+  function drawOverlay() {
+    const [W, H] = fit(ov);
+    G[cur].draw(ovx, W, H, M, st);
+    document.getElementById("ov-title").textContent = `${G[cur].title} — expanded`;
+  }
+  document.getElementById("btn-expand").addEventListener("click", () => { overlay.classList.add("on"); drawOverlay(); });
+  document.getElementById("ov-close").addEventListener("click", () => overlay.classList.remove("on"));
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.classList.remove("on"); });
+
+  // ---- controls (stubs that visibly move the instruments) ----
+  const tau = document.getElementById("tau"), tauV = document.getElementById("tau-v");
+  tau.addEventListener("input", () => {
+    st.tau = Math.pow(10, +tau.value);
+    tauV.textContent = st.tau.toFixed(2);
+    gauges.G1.setTarget(6 + 80 / (1 + st.tau * 6));      // stub coupling: τ reshapes G1
+    draw();
+  });
+  const frac = document.getElementById("frac"), fracV = document.getElementById("frac-v");
+  frac.addEventListener("input", () => {
+    st.frac = +frac.value / 100;
+    fracV.textContent = `${frac.value}%`;
+    gauges.G2.setTarget(10 + 40 * (1.05 - st.frac));     // stub coupling: less data = more gain left
+    draw();
+  });
+  const mc = document.getElementById("mc"), mcV = document.getElementById("mc-v");
+  mc.addEventListener("input", () => { st.mc = +mc.value; mcV.textContent = mc.value; });
+  const exV = document.getElementById("ex-v");
+  const EX = ["#0007 · most-starved", "#0112 · most-anchored", "#0009 · random", "#0044 · guest"];
+  let exi = 0;
+  document.getElementById("ex-prev").addEventListener("click", () => { exi = (exi + 3) % 4; exV.textContent = EX[exi]; draw(); });
+  document.getElementById("ex-next").addEventListener("click", () => { exi = (exi + 1) % 4; exV.textContent = EX[exi]; draw(); });
+
+  // run full hmc — stub run: button pulses, G3 dips then recovers, alert lands
+  const hmcBtn = document.getElementById("btn-hmc");
+  hmcBtn.addEventListener("click", () => {
+    if (hmcBtn.classList.contains("running")) return;
+    hmcBtn.classList.add("running"); hmcBtn.textContent = "hmc running…";
+    feed.push("WARN", `HMC chain launched · ${st.mc} samples (stub)`);
+    gauges.G3.setTarget(84);
+    setTimeout(() => {
+      gauges.G3.setTarget(97.1);
+      hmcBtn.classList.remove("running"); hmcBtn.textContent = "run full hmc";
+      feed.push("OK", "HMC done · R̂ 1.01 · overlay refreshed (stub)");
+      showGraphByKey("hmctrace");
+    }, 2600);
+  });
+
+  // generate audit — new tab per spec
+  document.getElementById("btn-audit").addEventListener("click", () => {
+    feed.push("INFO", "audit compiled · opening new tab (stub)");
+    window.open(`audit.html?model=${M.key}`, "_blank");
+  });
+
+  window.addEventListener("resize", draw);
+  draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE · fidget</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <div class="top">
+    <div class="brand">F<span class="o">O</span>RGE</div>
+    <div class="crumb">dash 2 → <b>fidget</b></div>
+    <div class="spacer"></div>
+    <a class="backlink" id="back2" href="dash2.html">↩ mode select</a>
+  </div>
+  <div class="doc">
+    <div class="eye">fidget — hands-on demo</div>
+    <h1 id="t">—<span class="stub-tag">stub</span></h1>
+    <div class="sub" id="s">—</div>
+    <div class="card"><div class="kick">drop zone</div>
+      <p id="drop-line">—</p>
+    </div>
+    <div class="card"><div class="kick">what lands here later</div>
+      <p>The per-model interactive: scored output + an uncertainty band + a themed visualization,
+         on the /api/predict contract (tier-2 adapter). Design pass only — no wiring yet.</p>
+    </div>
+    <p style="margin-top:20px"><a id="to-forge" href="#">→ or open the FORGE dashboard for this model</a></p>
+  </div>
+<script src="assets/js/stub.js"></script>
+<script>
+(() => {
+  "use strict";
+  const M = FORGE_STUB.modelFromQuery();
+  document.documentElement.style.setProperty("--ac", M.accent);
+  document.getElementById("back2").href = "dash2.html?model=" + M.key;
+  document.getElementById("t").firstChild.textContent = "FIDGET · " + M.name;
+  document.getElementById("s").textContent = M.sub;
+  const lines = {
+    genre: "drag a track in → per-genre verdict cards + σ whiskers.",
+    phonon: "build a crystal → predicted DOS curve with a posterior ribbon.",
+    llp: "drop an event CSV → signal score + uncertainty band.",
+    tutorial: "pick a penguin → species call, and every step explained.",
+  };
+  document.getElementById("drop-line").textContent = lines[M.key] || "drop a domain object here.";
+  document.getElementById("to-forge").href = "forge.html?model=" + M.key;
+})();
+</script>
+</body>
+</html>

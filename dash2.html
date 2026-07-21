@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE · fidget or forge</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <div class="top">
+    <div class="brand">F<span class="o">O</span>RGE</div>
+    <div class="crumb">dash 1 → <b>dash 2 · mode select</b> → fidget | forge</div>
+    <div class="spacer"></div>
+    <a class="backlink" href="dash1.html">↩ model select</a>
+  </div>
+
+  <div class="select-wrap">
+    <div class="select-eye" id="eye">dash 2</div>
+    <div class="select-title" id="title">—</div>
+
+    <div class="plate-row" style="grid-template-columns:repeat(auto-fit,minmax(260px,320px))">
+      <div class="plate big" id="p-fidget">
+        <span class="pn">A</span><span class="pt">FIDGET</span>
+        <span class="ps">hands-on demo · drop / tune / play</span>
+      </div>
+      <div class="plate big" id="p-forge">
+        <span class="pn">B</span><span class="pt">FORGE</span>
+        <span class="ps">the observatory · sleek, sexy dashboard</span>
+      </div>
+    </div>
+
+    <div class="select-hint">same model, two doors — <b>fidget</b> plays with it, <b>forge</b> interrogates it</div>
+  </div>
+
+<script src="assets/js/stub.js"></script>
+<script>
+(() => {
+  "use strict";
+  const M = FORGE_STUB.modelFromQuery();
+  document.getElementById("eye").textContent = `dash 2 — model locked: ${M.sub}`;
+  document.getElementById("title").textContent = M.name;
+  const f = document.getElementById("p-fidget"), g = document.getElementById("p-forge");
+  f.style.setProperty("--pc", M.accent);
+  g.style.setProperty("--pc", M.accent);
+  f.addEventListener("click", () => location.href = `fidget.html?model=${M.key}`);
+  g.addEventListener("click", () => location.href = `forge.html?model=${M.key}`);
+})();
+</script>
+</body>
+</html>
