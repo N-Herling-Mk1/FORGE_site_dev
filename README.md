@@ -5,8 +5,17 @@ Stage-C design repo — ui / design / flow only. **All data is stubbed.**
 ## Flow (locked from the flow chart)
 
     index.html   splash — strike-to-ignite (animated), ENTER →
-    dash1.html   model select toggle dash: LLP · MUSIC GENRE · PHONON · TUTORIAL
-    dash2.html   per-model mode select: [FIDGET] [FORGE]
+    dash1.html   HOLO DECK — dash 1 + dash 2 combined. Three.js spinning console:
+                 4 model plates (LLP · MUSIC GENRE · PHONON · TUTORIAL); clicking a
+                 plate pops the [FIDGET] [FORGE] window → that model's page.
+                 Top model rail (4 chips): click = deck auto-spins to that plate,
+                 then the mode window opens. Keys 1–4 do the same; ?model= deep-links.
+                 SOLAR palette locked; center emblem = forge flame outline over the
+                 projector orb (assets/images/forge_outline.png, alpha-processed;
+                 inline base64 fallback keeps the flame alive on file:// opens).
+                 Extras: forge root (click orb), subsystem folder stacks (hex nodes),
+                 bit-mask shards, deck gizmo.
+    dash2.html   redirect → dash1.html (kept so old links don't 404)
     fidget.html  hands-on demo stub
     forge.html   THE dashboard — 4 tenet gauges, console, graph stage, controls
     audit.html   generate-audit target (opens in a new tab)

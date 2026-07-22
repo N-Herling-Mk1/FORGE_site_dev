@@ -12,7 +12,7 @@
     <div class="brand">F<span class="o">O</span>RGE</div>
     <div class="crumb">dash 2 → <b>forge · main dashboard</b></div>
     <div class="spacer"></div>
-    <a class="backlink" id="back2" href="dash2.html">↩ mode select</a>
+    <a class="backlink" id="back2" href="dash1.html">↩ model select</a>
   </div>
 
   <div class="dash">
@@ -113,7 +113,7 @@
   const M = FORGE_STUB.modelFromQuery();
   document.documentElement.style.setProperty("--pc", M.accent);
   document.title = `FORGE · ${M.name}`;
-  document.getElementById("back2").href = `dash2.html?model=${M.key}`;
+  document.getElementById("back2").href = `dash1.html?model=${M.key}`;
   document.getElementById("mname").textContent = M.name;
   document.getElementById("msub").textContent  = `${M.sub} · ${M.family}`;
 

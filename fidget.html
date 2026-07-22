@@ -12,7 +12,7 @@
     <div class="brand">F<span class="o">O</span>RGE</div>
     <div class="crumb">dash 2 → <b>fidget</b></div>
     <div class="spacer"></div>
-    <a class="backlink" id="back2" href="dash2.html">↩ mode select</a>
+    <a class="backlink" id="back2" href="dash1.html">↩ model select</a>
   </div>
   <div class="doc">
     <div class="eye">fidget — hands-on demo</div>
@@ -33,7 +33,7 @@
   "use strict";
   const M = FORGE_STUB.modelFromQuery();
   document.documentElement.style.setProperty("--ac", M.accent);
-  document.getElementById("back2").href = "dash2.html?model=" + M.key;
+  document.getElementById("back2").href = "dash1.html?model=" + M.key;
   document.getElementById("t").firstChild.textContent = "FIDGET · " + M.name;
   document.getElementById("s").textContent = M.sub;
   const lines = {
