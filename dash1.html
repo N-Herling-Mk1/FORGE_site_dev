@@ -24,38 +24,70 @@
       repeating-linear-gradient(0deg, rgba(255,178,74,.016) 0 1px, transparent 1px 3px);}
 
   .hud{position:fixed;pointer-events:none;user-select:none;text-transform:uppercase;letter-spacing:.18em}
-  #brand{top:22px;left:24px}
-  #brand .mark{font-size:13px;color:var(--hot);letter-spacing:.42em;text-shadow:0 0 14px rgba(255,178,74,.6)}
-  #brand .sub{font-size:9.5px;color:var(--muted);letter-spacing:.34em;margin-top:6px}
-  #brand .bar{margin-top:9px;width:148px;height:1px;background:linear-gradient(90deg,var(--sol),transparent)}
-  #brand{display:flex;align-items:center;gap:13px}
-  #brandlogo{width:46px;height:auto;pointer-events:none;filter:drop-shadow(0 0 9px rgba(73,166,255,.5)) drop-shadow(0 0 5px rgba(255,77,46,.45))}
-  #hint{bottom:22px;left:176px;font-size:9.5px;color:var(--muted);letter-spacing:.26em;line-height:1.9}
-  #hint b{color:var(--sol);font-weight:400}
 
-  #deckbar{top:22px;right:24px;text-align:right}
-  #deckbar .pl{font-size:9px;letter-spacing:.26em;color:var(--muted);margin-bottom:10px}
-  #deckbar .pl b{color:var(--hot);letter-spacing:.2em}
-  #deckbar a{pointer-events:auto;display:inline-block;font-size:9.5px;letter-spacing:.24em;color:var(--muted);
-    text-decoration:none;border:1px solid rgba(255,178,74,.22);padding:7px 12px;transition:.15s}
-  #deckbar a:hover{color:var(--sol);border-color:var(--sol)}
+  /* ============ LEFT COMMAND PANEL ============ */
+  #sidepanel{position:fixed;left:0;top:0;bottom:0;width:320px;z-index:40;display:flex;flex-direction:column;
+    padding:20px 18px;background:linear-gradient(180deg,rgba(16,9,3,.9),rgba(10,5,1,.84));
+    border-right:1px solid rgba(255,178,74,.22);backdrop-filter:blur(4px);
+    box-shadow:8px 0 30px rgba(0,0,0,.45);text-transform:uppercase;letter-spacing:.18em;user-select:none;
+    overflow-y:auto;scrollbar-width:thin}
+  #pbrand{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  #brandlogo{width:64px;height:auto;pointer-events:none;filter:drop-shadow(0 0 10px rgba(73,166,255,.5)) drop-shadow(0 0 6px rgba(255,77,46,.45))}
+  #pbrand .mark{font-size:16px;color:var(--hot);letter-spacing:.42em;text-shadow:0 0 14px rgba(255,178,74,.6)}
+  #pbrand .sub{font-size:10px;color:var(--muted);letter-spacing:.3em;margin-top:6px}
+  #pbrand .bar{margin-top:9px;width:160px;height:1px;background:linear-gradient(90deg,var(--sol),transparent)}
+  #sidenav{display:flex;flex-direction:column;margin-top:16px}
+  /* nav panels — tall rectangles, glass see-through, big accent index numbers */
+  .pbtn{cursor:pointer;position:relative;display:flex;align-items:center;gap:14px;
+    padding:22px 16px;margin-bottom:10px;border:1px solid rgba(255,178,74,.22);background:rgba(255,178,74,.04);
+    backdrop-filter:blur(2px);
+    transition:transform .16s,border-color .16s,background .16s,box-shadow .16s}
+  .pbtn .pn{font-family:Orbitron,var(--mono);font-weight:800;font-size:18px;letter-spacing:.12em;color:var(--pc,var(--sol));
+    text-shadow:0 0 10px color-mix(in srgb, var(--pc,#ffb24a) 45%, transparent)}
+  .pbtn .pt{font-family:Orbitron,var(--mono);font-weight:600;font-size:13px;letter-spacing:.18em;color:var(--pc,var(--sol))}
+  .pbtn::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pc,var(--sol));opacity:.4;transition:opacity .16s}
+  .pbtn:hover{border-color:var(--pc,var(--sol));background:rgba(255,178,74,.08);transform:translateX(3px)}
+  .pbtn:hover::before{opacity:1}
+  .pbtn.on{border-color:var(--pc,var(--sol));background:rgba(20,11,4,.55);
+    box-shadow:0 0 14px color-mix(in srgb, var(--pc,#ffb24a) 30%, transparent)}
+  .pbtn.on::before{opacity:1}
+  .pbtn.splash{margin-bottom:18px;padding:16px 16px}
+  .pbtn.splash .pn{color:var(--sol);font-size:15px}
 
-  /* top model rail — 4 selectable panels; click = auto-spin deck to that plate */
-  #modelrail{top:22px;left:50%;transform:translateX(-50%);display:flex;gap:10px}
-  .rchip{pointer-events:auto;cursor:pointer;position:relative;display:flex;align-items:center;gap:9px;
-    padding:9px 14px 11px;border:1px solid rgba(255,178,74,.22);background:rgba(14,7,2,.55);
-    clip-path:polygon(10px 0,100% 0,100% 100%,0 100%,0 10px);transition:transform .16s,border-color .16s,box-shadow .16s;backdrop-filter:blur(2px)}
-  .rchip .rn{font-size:8.5px;letter-spacing:.24em;color:var(--muted)}
-  .rchip .rt{font-family:Orbitron,var(--mono);font-weight:600;font-size:10.5px;letter-spacing:.2em;color:var(--pc,#ffb24a)}
-  .rchip::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--pc,#ffb24a);opacity:.45;transition:opacity .16s}
-  .rchip:hover{transform:translateY(-2px);border-color:var(--pc,#ffb24a)}
-  .rchip:hover::after{opacity:1}
-  .rchip.on{border-color:var(--pc,#ffb24a);background:rgba(20,11,4,.8);
-    box-shadow:0 0 16px color-mix(in srgb, var(--pc,#ffb24a) 30%, transparent)}
-  .rchip.on::after{opacity:1}
-  @media (max-width:1240px){#modelrail{top:82px}}
-  @media (max-width:760px){#modelrail{flex-wrap:wrap;justify-content:center;width:94vw}
-    .rchip{padding:7px 10px 9px}.rchip .rt{font-size:9.5px}}
+  /* zoom amount key — magnifier + % readout + meter */
+  #zoomkey{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,178,74,.14)}
+  #zoomkey .zrow{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.24em;color:var(--muted);margin-bottom:9px}
+  #zoomkey .zlab{display:flex;align-items:center;gap:8px}
+  #zoomkey .zlab svg{color:var(--sol);filter:drop-shadow(0 0 4px rgba(255,178,74,.6));flex:none}
+  #zoomkey .zrow b{color:var(--hot);font-weight:400;letter-spacing:.1em;font-size:14px}
+  #zoomkey .ztrack{position:relative;height:9px;border:1px solid rgba(255,178,74,.25);background:rgba(255,178,74,.05)}
+  #zoomkey #zfill{position:absolute;left:0;top:0;bottom:0;width:50%;
+    background:linear-gradient(90deg,var(--sol),var(--accent));box-shadow:0 0 10px rgba(255,178,74,.5)}
+  #zoomkey .zends{display:flex;justify-content:space-between;font-size:8.5px;letter-spacing:.2em;color:var(--muted);margin-top:5px}
+
+  /* ============ TOP INSTRUCTION TICKER ============ */
+  #ticker{position:fixed;left:320px;right:0;top:0;height:36px;z-index:35;display:flex;align-items:center;overflow:hidden;
+    border-bottom:1px solid rgba(255,178,74,.16);background:rgba(10,5,1,.45);backdrop-filter:blur(3px)}
+  .ttrack{display:inline-flex;white-space:nowrap;animation:tickmove 46s linear infinite}
+  .ttrack span{font-size:9.5px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+  .ttrack b{color:var(--sol);font-weight:400}
+  @keyframes tickmove{to{transform:translateX(-50%)}}
+  @media (prefers-reduced-motion: reduce){.ttrack{animation:none}}
+  @media (max-width:760px){
+    #sidepanel{right:0;bottom:auto;width:100%;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px;
+      padding:10px 12px;border-right:none;border-bottom:1px solid rgba(255,178,74,.22)}
+    #pbrand{margin:0 10px 0 0}
+    #brandlogo{width:40px}
+    #pbrand .mark{font-size:12px}
+    #pbrand .sub{font-size:8px}
+    #pbrand .bar{display:none}
+    #sidenav{flex-direction:row;flex-wrap:wrap;gap:6px;margin-top:0}
+    .pbtn{margin-bottom:0;padding:8px 10px}
+    .pbtn.splash{margin-bottom:0}
+    #orient{display:none !important}
+    #zoomkey{display:none !important}
+    #ticker{left:0;top:auto;bottom:0}
+  }
 
   .x{pointer-events:auto;cursor:pointer;color:var(--muted);font-size:15px;line-height:1;padding:4px 6px;border:1px solid rgba(255,178,74,.2)}
   .x:hover{color:var(--hot);border-color:var(--sol)}
@@ -184,12 +216,12 @@
     #fw-scene{left:50%}
     .fwinspect{width:100%;border-left:none;border-top:1px solid rgba(255,178,74,.18)}
   }
-  #orient{bottom:18px;left:22px;width:140px;pointer-events:none}
-  #orient .ohead{font-size:8px;letter-spacing:.24em;color:var(--muted);margin-bottom:5px;text-align:center}
-  #gizmo{width:124px;height:124px;margin:0 auto;border:1px solid rgba(255,178,74,.18);
+  #orient{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,178,74,.14)}
+  #orient .ohead{font-size:8px;letter-spacing:.24em;color:var(--muted);margin-bottom:7px;text-align:center}
+  #gizmo{width:140px;height:140px;margin:0 auto;border:1px solid rgba(255,178,74,.18);
     clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
   #gizmo canvas{display:block}
-  #orient .oread{display:flex;justify-content:space-between;margin-top:6px;font-size:8.5px;letter-spacing:.1em;color:var(--muted)}
+  #orient .oread{display:flex;justify-content:space-between;margin-top:7px;font-size:8.5px;letter-spacing:.1em;color:var(--muted)}
   #orient .oread b{color:var(--hot);font-weight:400}
   #scan{position:fixed;left:0;right:0;height:3px;top:-12px;pointer-events:none;z-index:82;opacity:0;color:var(--sol);
     background:linear-gradient(90deg,transparent,currentColor 18%,#fff 50%,currentColor 82%,transparent);
@@ -207,36 +239,34 @@
 <div id="scan"></div>
 <div id="flash"></div>
 
-<div id="deckbar" class="hud">
-  <div class="pl">// HOLO DECK &mdash; <b>SELECT A MODEL</b></div>
-  <a href="index.html">&#8617; SPLASH</a>
-</div>
+<div id="ticker"><div class="ttrack">
+  <span id="tick-a"></span><span id="tick-b" aria-hidden="true"></span>
+</div></div>
 
-<div id="modelrail" class="hud"></div>
-
-<div id="brand" class="hud">
-  <img id="brandlogo" src="assets/images/forge_outline.png" alt="FORGE">
-  <div class="btxt">
-    <div class="mark">F&middot;O&middot;R&middot;G&middot;E</div>
-    <div class="sub">posterior observatory</div>
-    <div class="bar"></div>
+<aside id="sidepanel">
+  <div id="pbrand">
+    <img id="brandlogo" src="assets/images/forge_outline.png" alt="FORGE">
+    <div class="btxt">
+      <div class="mark">F&middot;O&middot;R&middot;G&middot;E</div>
+      <div class="sub">posterior observatory</div>
+      <div class="bar"></div>
+    </div>
   </div>
-</div>
-<div id="orient" class="hud">
-  <div class="ohead">// DECK ORIENTATION</div>
-  <div id="gizmo"></div>
-  <div class="oread"><span>AZ <b id="o-az">000&deg;</b></span><span>EL <b id="o-el">+00&deg;</b></span><span>Z <b id="o-z">22</b></span></div>
-</div>
-
-<div id="hint" class="hud">
-  <div><b>drag</b> &nbsp;orbit &nbsp;&middot;&nbsp; <b>scroll</b> &nbsp;zoom</div>
-  <div><b>click plate</b> &nbsp;select model</div>
-  <div><b>top rail</b> &nbsp;spin-to model</div>
-  <div><b>click core</b> &nbsp;forge root</div>
-  <div><b>click node</b> &nbsp;subsystem files</div>
-  <div><b>click grid</b> &nbsp;edit bit-mask</div>
-  <div><b>keys 1&ndash;4</b> &nbsp;quick select</div>
-</div>
+  <div id="sidenav"></div>
+  <div id="zoomkey">
+    <div class="zrow">
+      <span class="zlab"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><line x1="10.1" y1="10.1" x2="14.6" y2="14.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>// ZOOM</span>
+      <span><b id="z-val">68%</b></span>
+    </div>
+    <div class="ztrack"><div id="zfill"></div></div>
+    <div class="zends"><span>OUT</span><span>IN</span></div>
+  </div>
+  <div id="orient">
+    <div class="ohead">// DECK ORIENTATION</div>
+    <div id="gizmo"></div>
+    <div class="oread"><span>AZ <b id="o-az">000&deg;</b></span><span>EL <b id="o-el">+00&deg;</b></span></div>
+  </div>
+</aside>
 
 <!-- pixel-grid editor (bottom-right) -->
 <div id="dock">
@@ -304,8 +334,13 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
   /* SOLAR — locked deck palette */
   const C={void:0x070402,base:0xffb24a,dim:0x6b3a12,hot:0xffe9c8,accent:0xff4d2e};
   const PAL={base:C.base,accent:C.accent,hot:C.hot,dim:C.dim};
-  let theta=0.7,phi=1.05,rad=22,dragging=false,lx=0,ly=0,downXY=null;   // camera state (deep link may set theta)
-  let SPIN=null;                                                        // auto-spin: {from,to,t0,dur,cb}
+  const SNAP_DUR=0.5, SPIN_DUR=0.9;                                     // hover snap / key-select sweep
+  const DEFAULT_RAD=22, DIVE_RAD=4.2;                                   // normal zoom (68% on the key) / boot dive — flame fills frame
+  const REST_PHI=(90-17)*Math.PI/180, BOOT_PHI=Math.PI/2;               // standard view: EL +17° / boot starts level with the flame
+  const BOOT_HOLD=1.0, BOOT_ZOOM_DUR=1.8;                               // boot: hold at dive, then pull out
+  let theta=0.7,phi=REST_PHI,rad=DEFAULT_RAD,dragging=false,lx=0,ly=0,downXY=null;   // camera state (deep link may set theta)
+  let SPIN=null;                                                        // auto-spin: {from,to,t0,dur,cb,snap}
+  let ZOOM=null;                                                        // auto-zoom: {from,to,t0,dur,hold}
   const PULSES=[]; let alertBusy=false;
   const EDGE={container:'#2DD4FF',preview:'#FFC857',external:'#37E08B'};
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -539,31 +574,54 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
   function clearPlates(){ platePanels.forEach(s=>s.userData.active=false); }
   function applyDeepLink(){
     const qk=new URLSearchParams(location.search).get('model'); const qi=ORDER.indexOf(qk);
-    if(qi>=0){ theta=plateAngle(qi); platePanels[qi].userData.active=true; paintRail(); }
+    if(qi>=0){ theta=plateAngle(qi); platePanels[qi].userData.active=true; paintNav(); }
   }
 
-  /* ---- top model rail — click = auto-spin deck to plate, then open [FIDGET][FORGE] ---- */
-  const railChips=[];
-  (function buildRail(){
-    const rail=document.getElementById('modelrail'); if(!rail)return;
-    PLATES.forEach((P,i)=>{ const c=document.createElement('div'); c.className='rchip';
-      c.style.setProperty('--pc',P.accent);
-      c.innerHTML='<span class="rn">0'+(i+1)+'</span><span class="rt">'+P.name+'</span>';
-      c.addEventListener('click',()=>railSelect(i)); rail.appendChild(c); railChips.push(c); });
+  /* ---- left command panel nav + instruction ticker ---- */
+  (function fillTicker(){
+    const txt='<b>HOVER A MODEL</b> \u2014 deck snaps to it \u25c6 <b>CLICK</b> \u2014 open [FIDGET]\u00b7[FORGE] \u25c6 '+
+      '<b>DRAG</b> \u2014 orbit \u25c6 <b>SCROLL</b> \u2014 zoom \u25c6 <b>CORE</b> \u2014 forge root \u25c6 '+
+      '<b>HEX NODES</b> \u2014 subsystem files \u25c6 <b>SHARD GRIDS</b> \u2014 bit-mask editor \u25c6 '+
+      '<b>KEYS 1\u20134</b> \u2014 quick select \u25c6 <b>ESC</b> \u2014 close \u25c6&nbsp;';
+    const a=document.getElementById('tick-a'), b=document.getElementById('tick-b');
+    if(a)a.innerHTML=txt; if(b)b.innerHTML=txt;
   })();
-  function paintRail(){ railChips.forEach((c,i)=>c.classList.toggle('on', !!(platePanels[i]&&platePanels[i].userData.active))); }
-  function spinToPlate(i,cb){
+  const navBtns=[];
+  (function buildNav(){
+    const nav=document.getElementById('sidenav'); if(!nav)return;
+    const sp=document.createElement('div'); sp.className='pbtn splash';
+    sp.innerHTML='<span class="pn">\u21a9</span><span class="pt">BACK TO SPLASH</span>';
+    sp.addEventListener('click',()=>{location.href='index.html';});
+    nav.appendChild(sp);
+    PLATES.forEach((P,i)=>{ const b=document.createElement('div'); b.className='pbtn';
+      b.style.setProperty('--pc',P.accent);
+      b.innerHTML='<span class="pn">0'+(i+1)+'</span><span class="pt">'+P.name+'</span>';
+      b.addEventListener('mouseenter',()=>navSnap(i));
+      b.addEventListener('mouseleave',()=>navLeave(i));
+      b.addEventListener('click',()=>navOpen(i));
+      nav.appendChild(b); navBtns.push(b); });
+  })();
+  function paintNav(){ navBtns.forEach((b,i)=>b.classList.toggle('on', !!(platePanels[i]&&platePanels[i].userData.active))); }
+  function spinToPlate(i,cb,snap){
     const target=plateAngle(i);
     if(reduce){ theta=target; if(cb)cb(); return; }               // reduced motion: jump, don't sweep
     let d=(target-theta)%(Math.PI*2); if(d>Math.PI)d-=Math.PI*2; if(d<-Math.PI)d+=Math.PI*2;
     if(Math.abs(d)<0.04){ if(cb)cb(); return; }
-    SPIN={from:theta,to:theta+d,t0:t,dur:0.9,cb};
+    SPIN={from:theta,to:theta+d,t0:t,dur:snap?SNAP_DUR:SPIN_DUR,cb,snap:!!snap};
   }
-  function railSelect(i){ const s=platePanels[i]; if(!s)return;   // plates land after fonts; ignore until then
-    closeGrid(); if(folderOpen)closeFolders();
-    clearPlates(); s.userData.active=true; paintRail();
+  function navSnap(i){ const s=platePanels[i]; if(!s||folderOpen)return;   // popup backdrop blocks hover anyway
+    platePanels.forEach(p=>p.userData.hover=(p===s));
     if(BEAM)BEAM.group.visible=false;
-    spinToPlate(i, ()=>fireAlert(s, ()=>openModeSelect(s)));
+    spinToPlate(i,null,true);                                     // hover = snap to front (SNAP_DUR)
+    if(!reduce){                                                  // zoom settles to NORMAL (68% = DEFAULT_RAD), 0.5s
+      ZOOM={from:rad,to:DEFAULT_RAD,t0:t,dur:SNAP_DUR,hold:0}; }
+  }
+  function navLeave(i){ const s=platePanels[i]; if(s)s.userData.hover=false; }
+  function navOpen(i){ const s=platePanels[i]; if(!s)return;      // plates land after fonts; ignore until then
+    closeGrid(); if(folderOpen)closeFolders();
+    clearPlates(); s.userData.active=true; paintNav();
+    if(BEAM)BEAM.group.visible=false;
+    spinToPlate(i, ()=>fireAlert(s, ()=>openModeSelect(s)), true);
   }
   // draw once fonts are in (Orbitron makes the plates land) — fallback after 1.5s
   if(document.fonts&&document.fonts.ready){ Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]).then(buildPlates); }
@@ -653,7 +711,7 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
       '<div class="row"><span class="k">samples</span><span class="v">'+m.n+'</span></div>'+
       '<div class="row"><span class="k">latent dim</span><span class="v">'+m.d+'</span></div>'+
       '<div class="row"><span class="k">\u03c4 default</span><span class="v">'+m.tau+'</span></div>';
-    paintModes(); paintRail();
+    paintModes(); paintNav();
     folderOpen=true; fwin.classList.add('show'); }
 
   /* ---- open / close + reset ---- */
@@ -665,7 +723,7 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
     if(hex){ hex.userData.online=true; hex.userData.target=1.18; } else { coreActive=true; }
     buildFolderStack(title,list); folderOpen=true; fwin.classList.add('show');
   }
-  function closeFolders(){ folderOpen=false; coreActive=false; resetHex(); clearPlates(); paintRail();
+  function closeFolders(){ folderOpen=false; coreActive=false; resetHex(); clearPlates(); paintNav();
     fwin.classList.remove('show'); fwin.classList.remove('select'); fwMod.style.color=''; }
 
   /* ============================ PIXEL-GRID EDITOR (bottom-right card) ============================ */
@@ -699,9 +757,9 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
   const target=new THREE.Vector3(0,0,0);
   function place(){ camera.position.set(target.x+rad*Math.sin(phi)*Math.cos(theta),target.y+rad*Math.cos(phi),target.z+rad*Math.sin(phi)*Math.sin(theta)); camera.lookAt(target); }
   const el=renderer.domElement; const ray=new THREE.Raycaster(), ptr=new THREE.Vector2();
-  el.addEventListener('pointerdown',e=>{SPIN=null;dragging=true;lx=e.clientX;ly=e.clientY;downXY=[e.clientX,e.clientY];el.setPointerCapture(e.pointerId);});
+  el.addEventListener('pointerdown',e=>{SPIN=null;if(ZOOM){delete ZOOM.phiFrom;delete ZOOM.phiTo;}dragging=true;lx=e.clientX;ly=e.clientY;downXY=[e.clientX,e.clientY];el.setPointerCapture(e.pointerId);});
   el.addEventListener('pointermove',e=>{ if(!dragging)return; theta+=(e.clientX-lx)*0.005; phi=Math.max(0.25,Math.min(Math.PI-0.25,phi-(e.clientY-ly)*0.005)); lx=e.clientX; ly=e.clientY; });
-  el.addEventListener('wheel',e=>{e.preventDefault();rad=Math.max(11,Math.min(60,rad+e.deltaY*0.02));},{passive:false});
+  el.addEventListener('wheel',e=>{e.preventDefault();ZOOM=null;rad=Math.max(11,Math.min(60,rad+e.deltaY*0.02));},{passive:false});
   el.addEventListener('pointermove',e=>{ if(dragging){ if(BEAM)BEAM.group.visible=false; return; }
     ptr.x=(e.clientX/innerWidth)*2-1; ptr.y=-(e.clientY/innerHeight)*2+1; ray.setFromCamera(ptr,camera);
     const hL=ray.intersectObjects(plateMeshes,false), hH=ray.intersectObjects(hexNodes,true), hP=ray.intersectObjects(pixelNodes,true);
@@ -735,16 +793,30 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
       else if(e.key==='ArrowRight')document.getElementById('fw-next').click();
       else if(e.key==='Enter'&&fVisible.length)fSelect(fVisible[fFront]); }
     else if(e.key==='Escape'){ closeGrid(); }
-    else if(e.key>='1'&&e.key<='4'){ railSelect(+e.key-1); }
+    else if(e.key>='1'&&e.key<='4'){ navOpen(+e.key-1); }
   });
-  addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+  function applyView(){
+    const sp=document.getElementById('sidepanel');
+    const off=(innerWidth>760 && sp)?sp.getBoundingClientRect().width:0;
+    camera.setViewOffset(innerWidth,innerHeight,-off/2,0,innerWidth,innerHeight);
+  }
+  addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);applyView();});
+  applyView();
 
   /* ============================ LOOP ============================ */
   let t=0;
   function loop(){
     requestAnimationFrame(loop); t+=0.016;
+    if(ZOOM){ const zt=t-ZOOM.t0;
+      if(zt<ZOOM.hold){ rad=ZOOM.from; if(ZOOM.phiFrom!==undefined)phi=ZOOM.phiFrom; }
+      else{ const pz=Math.min(1,(zt-ZOOM.hold)/ZOOM.dur);
+        const ez=pz<.5?4*pz*pz*pz:1-Math.pow(-2*pz+2,3)/2;
+        rad=ZOOM.from+(ZOOM.to-ZOOM.from)*ez;
+        if(ZOOM.phiFrom!==undefined)phi=ZOOM.phiFrom+(ZOOM.phiTo-ZOOM.phiFrom)*ez;
+        if(pz>=1)ZOOM=null; } }
     if(SPIN){ const pr=Math.min(1,(t-SPIN.t0)/SPIN.dur);
-      const e=pr<.5?4*pr*pr*pr:1-Math.pow(-2*pr+2,3)/2;               // easeInOutCubic
+      const e=SPIN.snap ? (1-Math.pow(1-pr,3))                    // snap: easeOutCubic — fast arrival
+                        : (pr<.5?4*pr*pr*pr:1-Math.pow(-2*pr+2,3)/2);   // easeInOutCubic
       theta=SPIN.from+(SPIN.to-SPIN.from)*e;
       if(pr>=1){ const cb=SPIN.cb; SPIN=null; if(cb)cb(); } }
     if(!reduce && !dragging && !folderOpen && !gridActive && !SPIN) theta+=0.0012;   // idle spin; resumes on close
@@ -784,7 +856,7 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
   let GZ=null;
   function buildGizmo(){
     const host=document.getElementById('gizmo'); if(!host)return;
-    const S=124;
+    const S=140;
     const gr=new THREE.WebGLRenderer({antialias:true,alpha:true});
     gr.setPixelRatio(Math.min(devicePixelRatio,2)); gr.setSize(S,S); gr.setClearColor(0x000000,0);
     host.appendChild(gr.domElement);
@@ -809,13 +881,17 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
       const d=glowSprite(P.accent,0.34,.95); d.position.set(Math.cos(a),0,Math.sin(a)); gw.add(d); });
     GZ={gr,gs,gc,disc,ring,ticks,axis,marker};
   }
-  const _oaz=document.getElementById('o-az'),_oel=document.getElementById('o-el'),_oz=document.getElementById('o-z');
+  const _oaz=document.getElementById('o-az'),_oel=document.getElementById('o-el');
+  const _zval=document.getElementById('z-val'),_zfill=document.getElementById('zfill'); let _zlast=-1;
   function updateGizmo(){ if(!GZ)return;
     const R=3.5; GZ.gc.position.set(R*Math.sin(phi)*Math.cos(theta),R*Math.cos(phi),R*Math.sin(phi)*Math.sin(theta)); GZ.gc.lookAt(0,0,0);
     if(_oaz){ const az=((theta*180/Math.PI)%360+360)%360, elv=90-phi*180/Math.PI;
       _oaz.textContent=az.toFixed(0).padStart(3,'0')+'\u00b0';
-      _oel.textContent=(elv>=0?'+':'\u2212')+Math.abs(elv).toFixed(0).padStart(2,'0')+'\u00b0';
-      _oz.textContent=rad.toFixed(0); }
+      _oel.textContent=(elv>=0?'+':'\u2212')+Math.abs(elv).toFixed(0).padStart(2,'0')+'\u00b0'; }
+    if(_zval){ const pct=Math.max(0,Math.min(1,(60-rad)/(60-DIVE_RAD)));
+      if(Math.abs(pct-_zlast)>0.002){ _zlast=pct;
+        _zfill.style.width=(pct*100).toFixed(1)+'%';
+        _zval.textContent=(pct*100).toFixed(0)+'%'; } }
     GZ.gr.render(GZ.gs,GZ.gc);
   }
   buildGizmo();
@@ -889,6 +965,9 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
     setTimeout(()=>{ cb(); alertBusy=false; }, 300);
   }
   buildBeam();
+  /* ---- boot animation: open framed on the flame (level, z at dive), hold, pull out + crane to deck tilt ---- */
+  if(!reduce){ rad=DIVE_RAD; phi=BOOT_PHI;
+    ZOOM={from:DIVE_RAD,to:DEFAULT_RAD,t0:0,dur:BOOT_ZOOM_DUR,hold:BOOT_HOLD,phiFrom:BOOT_PHI,phiTo:REST_PHI}; }
   place(); loop();
 })();
 </script>

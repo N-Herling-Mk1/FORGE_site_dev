@@ -36,13 +36,21 @@ fallback for `file://`), but served-over-localhost is the intended loop.
     dash1.html   HOLO DECK — dash 1 + dash 2 combined. Three.js spinning console:
                  4 model plates (LLP · MUSIC GENRE · PHONON · TUTORIAL); clicking a
                  plate pops the [FIDGET] [FORGE] window → that model's page.
-                 Top model rail (4 chips): click = deck auto-spins to that plate,
-                 then the mode window opens. Keys 1–4 do the same; ?model= deep-links.
+                 LEFT COMMAND PANEL: enlarged flame + F·O·R·G·E brand block,
+                 BACK TO SPLASH, the 4 model buttons — tall rectangular glass
+                 panels with big accent-colored index numbers (hover = deck
+                 snaps that plate to front AND settles zoom to normal 68% in
+                 0.5s · click = opens the mode window) — then the ZOOM key
+                 (magnifier icon, % readout, meter) and the deck-orientation
+                 gizmo (standard view: EL +17°). Scrolling instruction ticker
+                 across the top banner. Keys 1–4 quick-select; ?model= deep-links.
+                 BOOT ANIMATION: opens framed on the flame (level with it, max
+                 zoom), holds 1s, then pulls out + cranes down to the deck view.
                  SOLAR palette locked; center emblem = forge flame outline over the
                  projector orb (assets/images/forge_outline.png, alpha-processed;
                  inline base64 fallback keeps the flame alive on file:// opens).
                  Extras: forge root (click orb), subsystem folder stacks (hex nodes),
-                 bit-mask shards, deck gizmo.
+                 bit-mask shards.
     dash2.html   redirect → dash1.html (kept so old links don't 404)
     fidget.html  hands-on demo stub
     forge.html   THE dashboard — 4 tenet gauges, console, graph stage, controls
