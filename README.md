@@ -32,20 +32,63 @@ fallback for `file://`), but served-over-localhost is the intended loop.
 
 ## Flow (locked from the flow chart)
 
-    index.html   splash — strike-to-ignite (animated), ENTER →
+    index.html   splash — STRIKE TO IGNITE v3: the brand LOCKUP (crisp flame +
+                 F·O·R·G·E + POSTERIOR OBSERVATORY, canvas-drawn) is the LARGE
+                 central hero. Click anywhere on it — the CLICK POINT is the
+                 ignition point (Enter seeds center). Zap flash (0.35s) → the
+                 lockup burns off over 2.0s via the existing burn-front engine
+                 (no graph sequence), phase rail = pure burn progress
+                 (STRIKE/IGNITE/BURN/ETCH/REVEAL) — revealing the full FORGE
+                 P(θ|D) card beneath. Reveal HOLDS; second click/Enter ("ENTER
+                 THE OBSERVATORY") → dash1. Reduced-motion: instant reveal.
+                 Flame: assets/images/forge_flame_hero.png (sharpened 900px). →
     dash1.html   HOLO DECK — dash 1 + dash 2 combined. Three.js spinning console:
                  4 model plates (LLP · MUSIC GENRE · PHONON · TUTORIAL); clicking a
                  plate pops the [FIDGET] [FORGE] window → that model's page.
-                 LEFT COMMAND PANEL: enlarged flame + F·O·R·G·E brand block,
-                 BACK TO SPLASH, the 4 model buttons — tall rectangular glass
-                 panels with big accent-colored index numbers (hover = deck
-                 snaps that plate to front AND settles zoom to normal 68% in
-                 0.5s · click = opens the mode window) — then the ZOOM key
-                 (magnifier icon, % readout, meter) and the deck-orientation
-                 gizmo (standard view: EL +17°). Scrolling instruction ticker
-                 across the top banner. Keys 1–4 quick-select; ?model= deep-links.
-                 BOOT ANIMATION: opens framed on the flame (level with it, max
-                 zoom), holds 1s, then pulls out + cranes down to the deck view.
+                 LAYOUT: left panel (360px) = green-cathode SCREEN (fixed
+                 240px face — no height jumping between HELP and facts) over
+                 the 4 model buttons, with open space below for future
+                 fixtures. Deck-area TOP-LEFT = flame + F·O·R·G·E brand (300px,
+                 matches the zoom key's footprint) with a 190×174 BACK TO
+                 SPLASH tile under it (matches the gizmo block); TOP-RIGHT =
+                 ZOOM key (magnifier, % readout, meter) over the
+                 deck-orientation gizmo (EL +17° standard). Boot ends with a
+                 CONTROL DEMO outro: a zoom breath (SCROLL help row lights up),
+                 then a gimbal tumble-twist (DRAG row lights up), settling back
+                 at standard view — any input cancels it. Model buttons: hover = deck
+                 snaps that plate to front, HOLDS it there, the center bulb
+                 charges with that model's accent and projects its beam onto
+                 the panel; zoom settles to normal 65% in 0.5s; leaving releases
+                 the hold and deck animation resumes · click = opens the mode
+                 window) — then the ZOOM key (magnifier icon, % readout, meter)
+                 and the deck-orientation gizmo (standard view: EL +17°).
+                 Highlighted plates grow larger and drop additive opacity so
+                 the text reads crisp. SCREEN: amber chassis bezel, green
+                 phosphor face, scanlines, refresh sweep, status LEDs, blinking
+                 block cursor. HELP rows scroll in staggered; DECK LOG facts
+                 TYPE on at ~55 cps, monochrome green (model accents stay on
+                 the plates / beam).
+                 BOOT — FOUR PHASES (~8s): (1) framed on the flame at max zoom
+                 — the ring disk sits FLAT, a thin edge-on line behind it —
+                 hold 1.2s; (2) zoom out + crane over the flat Saturn disk;
+                 (3) the disks POP up into 3d space — tiers split to ±3.4 with
+                 an overshoot, tilted rings trail in; (4) the orb PRINTS the
+                 rest — beam sweeps a revolution, plates / hex nodes / shards
+                 materialize under it with a flash pop, bands flicker in.
+                 Any input skips straight to the finished deck; reduced-motion
+                 gets it instant. Boot plays ONLY splash→deck: arrivals with
+                 ?model= (backlinks from FORGE/FIDGET) land on the finished deck.
+                 DECK LOG: when idle, the beam aperiodically (6–14s gaps)
+                 self-scans a hex node / bit-mask shard / model plate and the
+                 MONITOR shows that element's fun fact (source in its accent).
+                 CLICKING a hex or shard fires the same scan manually — beam
+                 locks on, fact in the monitor, 6s dwell. 17 facts mapped
+                 across LLLA · HMC · BUNDLES · GAUGES · AUDIT · TELEMETRY,
+                 SHARD-01…07, and the four models. Any interaction cancels a
+                 scan and the monitor drops back to HELP. Keys 1–4 quick-select;
+                 ?model= deep-links. (Parked: per-hex folder stacks + the
+                 bit-mask editor are no longer click-reachable — core root
+                 stack remains via the orb.)
                  SOLAR palette locked; center emblem = forge flame outline over the
                  projector orb (assets/images/forge_outline.png, alpha-processed;
                  inline base64 fallback keeps the flame alive on file:// opens).
@@ -79,7 +122,7 @@ Fonts: Orbitron (display) + Share Tech Mono.
 Holo deck (dash1) runs the SOLAR machinery palette: #ffb24a base · #ff4d2e accent ·
 #ffe9c8 hot on warm black #070402; model accents pop against it.
 
-## Splash tweaks vs forge_splash (4) (2).html
+## Splash tweaks vs forge_splash (4) (2).html (superseded by STRIKE v2 above)
 
 1. Phase rail (progress gauge) enlarged: 640px wide, 5px track, 15px nodes, 11px labels, raised clear of the tagline.
 2. HMC animation (burn-in walkers + sample cloud) brightened: chain lines .16→.36 α + thicker, dots .5→.85, samples ~2× alpha.

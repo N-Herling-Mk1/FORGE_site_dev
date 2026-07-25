@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-<title>FORGE — strike to ignite</title>
+<title>FORGE — strike to ignite</title><!-- hero flame burns off at the strike point, revealing the P(θ|D) card -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -24,7 +24,7 @@
 
   /* logo: black background keyed out by screen blend, so the live flame shows through */
   #logo{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);
-    width:min(300px,46vw);height:auto;mix-blend-mode:screen;pointer-events:none;z-index:5;
+    width:min(420px,58vw);height:auto;mix-blend-mode:screen;pointer-events:none;z-index:5;
     filter:drop-shadow(0 0 22px rgba(45,212,255,.40)) drop-shadow(0 0 30px rgba(255,77,31,.34));
     transition:filter .25s, transform .25s, opacity .5s;}
 
@@ -171,7 +171,14 @@
   const cv2 = document.getElementById("fx2");
   const ctx2 = cv2.getContext("2d");
   const logo  = document.getElementById("logo");
-  let W=0,H=0,DPR=1, cx=0, cy=0, flameW=0, flameH=0, heatGrid=null, burnFronts=null, skRect=null, logoBox=null, strikeHover=0;
+  // crisp hero flame — the veneer that burns off. Falls back to old behavior if missing.
+  const heroImg = new Image(); let heroReady=false;
+  heroImg.onload = ()=>{ heroReady=true; };
+  logo.style.opacity="0";                                    // the card waits under the veneer
+  heroImg.src = "assets/images/forge_flame_hero.png";
+  let strikePt = null;                                       // click point = ignition seed
+  let voidCol = "#05030B";
+  let W=0,H=0,DPR=1, cx=0, cy=0, flameW=0, flameH=0, heatGrid=null, burnFronts=null, skRect=null, logoBox=null, heroBox=null, strikeHover=0;
   function resize(){
     DPR = Math.min(1.5, devicePixelRatio||1);
     W = innerWidth; H = innerHeight;
@@ -182,14 +189,16 @@
     cv2.style.width=W+"px"; cv2.style.height=H+"px";
     ctx2.setTransform(DPR,0,0,DPR,0,0);
     cx = W/2; cy = H*0.46;
-    const logoW = Math.min(300, W*0.46);
+    const logoW = Math.min(420, W*0.58);
+    voidCol = getComputedStyle(document.body).backgroundColor || voidCol;
     flameW = logoW*1.42; flameH = logoW*1.72;
     // the logo plate's on-screen box, pre-scaled to the finale scale (1.06) —
     // the burn and its burning edge are confined to this.
     const r = logo.getBoundingClientRect();
     const lw = r.width||logoW, lh = r.height||logoW, s = 1.06;
     logoBox = { x: cx - lw*s/2, y: cy - lh*s/2, w: lw*s, h: lh*s };
-    buildHeat();
+    const HW=Math.min(780, W*0.84), HH=HW*0.23;              // the LOCKUP is the hero — large + central
+    heroBox = { x: cx-HW/2, y: cy-HH/2, w: HW, h: HH };
     buildBurn();
     skRect = null;                                          // recomputed lazily in the loop
   }
@@ -335,8 +344,8 @@
 
   // ── paper-burn fronts: irregular edges, confined to the logo plate ──
   function buildBurn(){
-    if(!flameW || !logoBox) return;
-    const b=logoBox, bcx=b.x+b.w/2, bcy=b.y+b.h/2, bdiag=Math.hypot(b.w,b.h);
+    if(!flameW || !heroBox) return;
+    const b=heroBox, bcx=b.x+b.w/2, bcy=b.y+b.h/2, bdiag=Math.hypot(b.w,b.h);
     const spots=[];
     const N = 24;
     for(let i=0;i<N;i++){
@@ -353,9 +362,11 @@
         harm, ch, bias:Math.random()*6.283, biasA:0.22+Math.random()*0.20,
       });
     }
-    // ignite from the centre outward — start time grows with distance from the logo
+    // ignite from the STRIKE POINT outward — start time grows with distance from it
+    const sp = strikePt || {x:bcx, y:bcy};
+    for(const s of spots) s.dist = Math.hypot(s.x-sp.x, s.y-sp.y);
     const maxD = Math.max(...spots.map(s=>s.dist)) || 1;
-    for(const s of spots) s.start = (s.dist/maxD)*0.42 + Math.random()*0.06;
+    for(const s of spots) s.start = (s.dist/maxD)*0.55 + Math.random()*0.05;
     burnFronts = spots;
   }
   function frontRadius(f, ang){
@@ -519,6 +530,59 @@
     ctx.restore();
   }
 
+  // ── the veneer: the brand LOCKUP (flame + F·O·R·G·E + sub), large + central,
+  //    on a void plate. The burn fronts erode THIS, revealing the card beneath. ──
+  function drawLockup(g, b, jx, jy, aMul, hover, surge){
+    const pad=b.h*0.06;
+    const fh=b.h*0.92, fw=heroReady ? fh*(heroImg.width/heroImg.height) : 0;
+    const fx=b.x+pad+jx, fy=b.y+(b.h-fh)/2+jy;
+    if(heroReady){
+      g.globalCompositeOperation="lighter";
+      g.globalAlpha=aMul*(0.14+0.18*hover+0.28*surge);
+      g.drawImage(heroImg, fx-fw*0.06, fy-fh*0.06, fw*1.12, fh*1.12);
+      g.globalCompositeOperation="source-over"; g.globalAlpha=aMul;
+      g.drawImage(heroImg, fx, fy, fw, fh);
+    }
+    const tx=b.x+pad+fw+b.h*0.26+jx, tcy=b.y+b.h/2+jy;
+    const word="F·O·R·G·E";
+    const ws=b.h*0.34, ss=b.h*0.145;
+    g.textBaseline="alphabetic"; g.textAlign="left";
+    g.font="800 "+ws+"px Orbitron, 'Share Tech Mono', monospace";
+    try{ g.letterSpacing=(ws*0.34)+"px"; }catch(_){}
+    g.globalCompositeOperation="lighter"; g.globalAlpha=aMul*(0.35+0.30*hover+0.30*surge);
+    g.fillStyle="rgba(255,178,74,0.8)"; g.fillText(word, tx, tcy-b.h*0.06);
+    g.globalCompositeOperation="source-over"; g.globalAlpha=aMul;
+    g.fillStyle="#ffe9c8"; g.fillText(word, tx, tcy-b.h*0.06);
+    const ww=g.measureText(word).width;
+    g.font="600 "+ss+"px 'Share Tech Mono', monospace";
+    try{ g.letterSpacing=(ss*0.55)+"px"; }catch(_){}
+    g.fillStyle="rgba(217,185,140,0.85)";
+    g.fillText("POSTERIOR OBSERVATORY", tx, tcy+b.h*0.17);
+    const grd=g.createLinearGradient(tx,0,tx+ww,0);
+    grd.addColorStop(0,"rgba(255,178,74,0.9)"); grd.addColorStop(1,"rgba(255,178,74,0)");
+    g.fillStyle=grd; g.fillRect(tx, tcy+b.h*0.26, ww, Math.max(1.5,b.h*0.012));
+    try{ g.letterSpacing="0px"; }catch(_){}
+    g.globalAlpha=1;
+  }
+  function drawVeneer(t, surge, hover, zap, breath){
+    if(!heroBox) return;
+    const b=heroBox, g=ctx2;
+    g.save();
+    g.fillStyle=voidCol;                                     // seamless plate — the lockup floats on void
+    g.fillRect(b.x-2, b.y-2, b.w+4, b.h+4);
+    const bs=1+0.008*breath+0.02*surge;                      // gentle breathing
+    g.translate(b.x+b.w/2, b.y+b.h/2); g.scale(bs,bs); g.translate(-(b.x+b.w/2), -(b.y+b.h/2));
+    drawLockup(g, b, 0, 0, 1, hover, surge);
+    if(zap>0){                                               // ZAP: jittered electric copies + white wash
+      g.globalCompositeOperation="lighter";
+      for(let k=0;k<3;k++)
+        drawLockup(g, b, (Math.random()-0.5)*12*zap, (Math.random()-0.5)*12*zap, zap*(0.25+Math.random()*0.30), hover, surge);
+      g.globalCompositeOperation="source-over";
+      g.globalAlpha=zap*0.5; g.fillStyle="#fff";
+      g.fillRect(b.x-2, b.y-2, b.w+4, b.h+4); g.globalAlpha=1;
+    }
+    g.restore();
+  }
   // ── reticle + rings (HELIX console echo) ────────────────────────────────
   function drawFrame(t, glow){
     ctx.save(); ctx.globalCompositeOperation="lighter";
@@ -557,12 +621,12 @@
   const railEl = document.getElementById("rail");
   const rtrack = document.getElementById("rtrack");
   const rfill  = document.getElementById("rfill");
-  const PH = [   // at = seconds since ignite (phase begins)
-    { name:"PRIOR",      at:0.50 },
-    { name:"LIKELIHOOD", at:1.10 },
-    { name:"POSTERIOR",  at:1.80 },
-    { name:"BURN-IN",    at:2.90 },
-    { name:"ETCH",       at:4.30 },
+  const PH = [   // at = seconds since ignite (phase begins) — pure burn progress
+    { name:"STRIKE", at:0.02 },
+    { name:"IGNITE", at:0.22 },
+    { name:"BURN",   at:0.60 },
+    { name:"ETCH",   at:1.45 },
+    { name:"REVEAL", at:2.30 },
   ];
   const railNodes = PH.map((p,i)=>{
     const n=document.createElement("div"); n.className="rnode";
@@ -584,8 +648,16 @@
     }
   }
 
-  function ignite(){
+  function ignite(px,py){
     if(state!=="idle") return;
+    if(px!==undefined && heroBox){                              // clamp the seed into the lockup
+      const b=heroBox, inset=10;
+      strikePt = { x: Math.max(b.x+inset, Math.min(b.x+b.w-inset, px)),
+                   y: Math.max(b.y+inset, Math.min(b.y+b.h-inset, py)) };
+    } else if(heroBox) strikePt = { x: heroBox.x+heroBox.w/2, y: heroBox.y+heroBox.h/2 };
+    buildBurn();                                                // re-seed fronts from the strike point
+    logo.style.opacity="1";                                     // the reveal target waits under the veneer
+    if(reduce){ state="held"; holdReveal(); updateRail(9); return; }
     state="igniting"; igniteAt=performance.now();
     strikeEl.style.transition="opacity .3s"; strikeEl.style.opacity="0";
     logo.style.transform="translate(-50%,-50%) scale(1.06)";
@@ -594,17 +666,27 @@
     for(let i=0;i<70;i++) spawnFire(1);
     if(navigator.vibrate) navigator.vibrate(40);
   }
+  function holdReveal(){                                        // burn done — full card holds, second input enters
+    strikeEl.style.transition="opacity .5s"; strikeEl.style.opacity="1";
+    if(keyEl) keyEl.innerHTML='<span class="glyph">&#9166;</span> ENTER THE OBSERVATORY';
+  }
+  function crossNow(){
+    if(state==="done") return; state="done";
+    flash.style.opacity="1";
+    setTimeout(cross, 320);
+  }
   function cross(){
-    state="done";
     if(ENTER_TARGET){ location.href = ENTER_TARGET; return; }
     document.getElementById("floor").classList.add("show");
   }
   document.getElementById("reignite").addEventListener("click", ()=>location.reload());
 
   addEventListener("keydown", e=>{
-    if(e.key==="Enter"||e.key===" "){ e.preventDefault(); ignite(); }
+    if(e.key==="Enter"||e.key===" "){ e.preventDefault();
+      if(state==="held") crossNow(); else ignite(); }
   });
-  addEventListener("pointerdown", ()=> ignite());
+  addEventListener("pointerdown", e=>{
+    if(state==="held") crossNow(); else ignite(e.clientX, e.clientY); });
   ["pointermove","mousemove"].forEach(ev=>{
     const h=e=>{ if(e.pointerType!=="touch"){ mx=e.clientX; my=e.clientY; } };
     window.addEventListener(ev, h, {passive:true});
@@ -618,17 +700,17 @@
     ctx.clearRect(0,0,W,H);
 
     // ignite progress (resolve → hold → overlay burns to the image edges → hold → cross)
-    let surge=0, post=0, fin=0, edge=0;
-    if(state==="igniting"){
-      const e=(now-igniteAt)/1000;
-      surge = Math.min(1, e/0.8);                          // flame roars up over 0.8s
-      post  = Math.min(1, Math.max(0,(e-0.40)/3.5));       // prior→like→posterior→burn-in 0.40 → 3.9s
-      fin   = Math.min(1, Math.max(0,(e-4.0)/3.8));        // veneer burns through slowly 4.0 → 7.5s
-      edge  = Math.min(1, Math.max(0,(e-7.0)/0.5));        // plate glow rises as the burn lands
-      if(e>8.0 && flash.style.opacity!=="1"){ flash.style.opacity="1"; } // burn freezes ~7.5, hold 0.5s, then wash
-      if(e>8.7){ cross(); }                                // segue from the held burning edge
-      if(Math.random()<0.9) spawnEmber(true);
-      updateRail(e);
+    let surge=0, post=0, fin=0, edge=0, zap=0, eIg=-1;
+    if(state==="igniting"||state==="held"){
+      const e = eIg = (now-igniteAt)/1000;
+      surge = Math.min(1, e/0.6);                          // flame roars up fast
+      zap   = Math.max(0, 1 - e/0.35);                     // electric strike flash, 0.35s
+      post  = Math.min(1, Math.max(0,(e-0.15)/2.2));       // inference resolves alongside the burn
+      fin   = Math.min(1, Math.max(0,(e-0.35)/2.0));       // THE BURN: 2.0s from zap end (his spec)
+      edge  = Math.min(1, Math.max(0,(e-1.95)/0.4));       // plate edge catches as the burn lands
+      if(state==="igniting" && fin>=1){ state="held"; holdReveal(); }   // reveal holds — second input enters
+      if(state==="igniting" && Math.random()<0.9) spawnEmber(true);
+      updateRail(Math.min(e, 2.4));
     }
     const breath = reduce?0.5:(0.5+0.5*Math.sin(t*1.4));
 
@@ -736,14 +818,13 @@
 
     // ── posterior layer, drawn on the canvas IN FRONT of the logo ──
     ctx2.clearRect(0,0,W,H);
-    if(post>0){
-      const frozen = burnProg>=1;                            // burn-through has reached the logo edge → hold still
-      if(!frozen) drawInference(ctx2, post, t);              // overlay shown while resolving + burning in
+    const frozen = burnProg>=1 || state==="held" || state==="done";
+    if(!frozen){
+      drawVeneer(t, surge, hover, zap, breath);              // plate + brand lockup — the thing that burns
 
-      // ── the posterior burns through, revealing the logo, and STOPS at the logo edge ──
-      if(burnProg>0 && logoBox){
-        const N=120, b=logoBox;
-        // distance from a point inside the plate to its border along an angle (ray→box)
+      // ── the burn: fronts erode the lockup, revealing the P(θ|D) card beneath ──
+      if(burnProg>0 && heroBox){
+        const N=120, b=heroBox;
         const rayBox=(px,py,c,s)=>{ let tm=Infinity;
           if(c>0) tm=Math.min(tm,(b.x+b.w-px)/c); else if(c<0) tm=Math.min(tm,(b.x-px)/c);
           if(s>0) tm=Math.min(tm,(b.y+b.h-py)/s); else if(s<0) tm=Math.min(tm,(b.y-py)/s);
@@ -751,28 +832,18 @@
         const trace=(s,R)=>{ ctx2.beginPath();
           for(let i=0;i<=N;i++){ const ang=i/N*6.283, c=Math.cos(ang), si=Math.sin(ang);
             let rr=R*frontRadius(s,ang);
-            rr=Math.min(rr, rayBox(s.x,s.y,c,si));             // clamp: never expand past the logo edge
+            rr=Math.min(rr, rayBox(s.x,s.y,c,si));
             const x=s.x+c*rr, y=s.y+si*rr;
             i?ctx2.lineTo(x,y):ctx2.moveTo(x,y);} ctx2.closePath(); };
         const Rof=s=>{ const sp=(burnProg-s.start)/(1-s.start); return sp<=0?0:s.r0+smooth(sp)*(s.rMax-s.r0); };
 
-        if(!frozen){
-          // wipe the wider inference viz outside the plate as the burn ramps
-          const wipe = smooth(Math.min(1, burnProg/0.5));
-          ctx2.save(); ctx2.globalCompositeOperation="destination-out"; ctx2.globalAlpha=wipe;
-          ctx2.beginPath(); ctx2.rect(0,0,W,H); ctx2.rect(b.x-1,b.y-1,b.w+2,b.h+2);
-          ctx2.fill("evenodd"); ctx2.restore();
-
-          // pass 1 — burn the holes (overlapping spots merge), revealing the logo
-          ctx2.save(); ctx2.globalCompositeOperation="destination-out";
-          for(const s of burnFronts){ const R=Rof(s); if(R<=0) continue;
-            trace(s,R); ctx2.fill();
-            ctx2.lineWidth=18; ctx2.strokeStyle="rgba(0,0,0,0.5)"; trace(s,R); ctx2.stroke();
-          }
-          ctx2.restore();
+        ctx2.save(); ctx2.globalCompositeOperation="destination-out";
+        for(const s of burnFronts){ const R=Rof(s); if(R<=0) continue;
+          trace(s,R); ctx2.fill();
+          ctx2.lineWidth=18; ctx2.strokeStyle="rgba(0,0,0,0.5)"; trace(s,R); ctx2.stroke();
         }
+        ctx2.restore();
 
-        // pass 2 — glowing burn-through edges (held when frozen — no fade)
         ctx2.save(); ctx2.globalCompositeOperation="lighter";
         for(const s of burnFronts){ const R=Rof(s); if(R<=0) continue;
           const a = s.bright;
@@ -792,14 +863,12 @@
         }
         ctx2.restore();
 
-        // pass 3 — re-erase interiors so the glow survives only on the merged OUTER edge
         ctx2.save(); ctx2.globalCompositeOperation="destination-out";
         for(const s of burnFronts){ const R=Rof(s); if(R<=0) continue;
           trace(s, Math.max(1, R-12)); ctx2.fill(); }
         ctx2.restore();
 
-        // sparks shed from the active fronts (only while still travelling)
-        if(!frozen) for(const s of burnFronts){ const sp=(burnProg-s.start)/(1-s.start); if(sp<=0||sp>0.96) continue;
+        for(const s of burnFronts){ const sp=(burnProg-s.start)/(1-s.start); if(sp<=0||sp>0.96) continue;
           if(embers.length<EMBER_CAP && Math.random()<0.45){ const ang=Math.random()*6.283, c=Math.cos(ang), si=Math.sin(ang);
             let rr=Rof(s)*frontRadius(s,ang); rr=Math.min(rr, rayBox(s.x,s.y,c,si));
             embers.push({x:s.x+c*rr, y:s.y+si*rr,

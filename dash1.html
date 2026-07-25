@@ -11,6 +11,7 @@
   :root{
     --void:#070402;--sol:#ffb24a;--sol-dim:#6b3a12;--hot:#ffe9c8;--accent:#ff4d2e;
     --tan:#d9b98c;--muted:#8a6a42;
+    --crt:#5aff85;--crt-dim:#2f9e52;--crt-glow:rgba(70,255,130,.55);
     --grid:#2b1d0e;
     --mono:'Share Tech Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
   }
@@ -26,16 +27,17 @@
   .hud{position:fixed;pointer-events:none;user-select:none;text-transform:uppercase;letter-spacing:.18em}
 
   /* ============ LEFT COMMAND PANEL ============ */
-  #sidepanel{position:fixed;left:0;top:0;bottom:0;width:320px;z-index:40;display:flex;flex-direction:column;
+  #sidepanel{position:fixed;left:0;top:0;bottom:0;width:360px;z-index:40;display:flex;flex-direction:column;
     padding:20px 18px;background:linear-gradient(180deg,rgba(16,9,3,.9),rgba(10,5,1,.84));
     border-right:1px solid rgba(255,178,74,.22);backdrop-filter:blur(4px);
     box-shadow:8px 0 30px rgba(0,0,0,.45);text-transform:uppercase;letter-spacing:.18em;user-select:none;
     overflow-y:auto;scrollbar-width:thin}
-  #pbrand{display:flex;align-items:center;gap:14px;margin-bottom:6px}
-  #brandlogo{width:64px;height:auto;pointer-events:none;filter:drop-shadow(0 0 10px rgba(73,166,255,.5)) drop-shadow(0 0 6px rgba(255,77,46,.45))}
+  #pbrand{position:fixed;top:20px;left:388px;width:300px;z-index:40;display:flex;align-items:center;gap:14px}
+  #brandlogo{width:54px;height:auto;pointer-events:none;filter:drop-shadow(0 0 10px rgba(73,166,255,.5)) drop-shadow(0 0 6px rgba(255,77,46,.45))}
   #pbrand .mark{font-size:16px;color:var(--hot);letter-spacing:.42em;text-shadow:0 0 14px rgba(255,178,74,.6)}
   #pbrand .sub{font-size:10px;color:var(--muted);letter-spacing:.3em;margin-top:6px}
-  #pbrand .bar{margin-top:9px;width:160px;height:1px;background:linear-gradient(90deg,var(--sol),transparent)}
+  #pbrand .btxt{flex:1}
+  #pbrand .bar{margin-top:9px;width:100%;height:1px;background:linear-gradient(90deg,var(--sol),transparent)}
   #sidenav{display:flex;flex-direction:column;margin-top:16px}
   /* nav panels — tall rectangles, glass see-through, big accent index numbers */
   .pbtn{cursor:pointer;position:relative;display:flex;align-items:center;gap:14px;
@@ -51,11 +53,9 @@
   .pbtn.on{border-color:var(--pc,var(--sol));background:rgba(20,11,4,.55);
     box-shadow:0 0 14px color-mix(in srgb, var(--pc,#ffb24a) 30%, transparent)}
   .pbtn.on::before{opacity:1}
-  .pbtn.splash{margin-bottom:18px;padding:16px 16px}
-  .pbtn.splash .pn{color:var(--sol);font-size:15px}
 
   /* zoom amount key — magnifier + % readout + meter */
-  #zoomkey{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,178,74,.14)}
+  #zoomkey{position:fixed;top:20px;right:24px;width:300px;z-index:40}
   #zoomkey .zrow{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.24em;color:var(--muted);margin-bottom:9px}
   #zoomkey .zlab{display:flex;align-items:center;gap:8px}
   #zoomkey .zlab svg{color:var(--sol);filter:drop-shadow(0 0 4px rgba(255,178,74,.6));flex:none}
@@ -65,28 +65,62 @@
     background:linear-gradient(90deg,var(--sol),var(--accent));box-shadow:0 0 10px rgba(255,178,74,.5)}
   #zoomkey .zends{display:flex;justify-content:space-between;font-size:8.5px;letter-spacing:.2em;color:var(--muted);margin-top:5px}
 
-  /* ============ TOP INSTRUCTION TICKER ============ */
-  #ticker{position:fixed;left:320px;right:0;top:0;height:36px;z-index:35;display:flex;align-items:center;overflow:hidden;
-    border-bottom:1px solid rgba(255,178,74,.16);background:rgba(10,5,1,.45);backdrop-filter:blur(3px)}
-  .ttrack{display:inline-flex;white-space:nowrap;animation:tickmove 46s linear infinite}
-  .ttrack span{font-size:9.5px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
-  .ttrack b{color:var(--sol);font-weight:400}
-  @keyframes tickmove{to{transform:translateX(-50%)}}
-  @media (prefers-reduced-motion: reduce){.ttrack{animation:none}}
+  /* ============ BACK TO SPLASH — floating, top-center of the deck area ============ */
+  #splashbtn{position:fixed;top:106px;left:388px;width:190px;height:174px;z-index:40;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-decoration:none;
+    border:1px solid rgba(255,178,74,.25);background:rgba(14,7,2,.55);backdrop-filter:blur(3px);
+    text-transform:uppercase;letter-spacing:.18em;transition:border-color .16s,background .16s,transform .16s}
+  #splashbtn .pn{color:var(--sol);font-size:27px;line-height:1}
+  #splashbtn .pt{font-family:Orbitron,var(--mono);font-weight:600;font-size:10.5px;letter-spacing:.2em;color:var(--sol);text-align:center}
+  #splashbtn:hover{border-color:var(--sol);background:rgba(255,178,74,.08);transform:translateY(-2px)}
+
+  /* ============ MONITOR — panel-mounted CRT screen (help + deck log) ============ */
+  #screen{margin:0 0 16px}
+  #screen .bezel{border:1px solid rgba(255,178,74,.35);background:linear-gradient(180deg,rgba(46,28,13,.6),rgba(20,12,5,.5));
+    padding:7px;box-shadow:0 0 22px rgba(0,0,0,.55),inset 0 0 10px rgba(0,0,0,.6)}
+  #screen .shead{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 7px}
+  #screen .shead .mtag{font-size:8px;letter-spacing:.24em;color:var(--muted)}
+  #screen .leds{display:flex;gap:5px}
+  #screen .leds i{width:5px;height:5px;border-radius:50%;background:var(--sol-dim)}
+  #screen .leds i:nth-child(2){background:var(--sol);box-shadow:0 0 5px rgba(255,178,74,.7)}
+  #screen .leds i:nth-child(3){background:var(--accent);animation:ledblink 2.6s steps(1) infinite}
+  @keyframes ledblink{0%,72%{opacity:1}73%,86%{opacity:.25}87%,100%{opacity:1}}
+  #screen .sface{position:relative;height:240px;padding:14px 15px 16px;background:#020a04;overflow:hidden;
+    box-shadow:inset 0 0 30px rgba(70,255,130,.14),inset 0 0 64px rgba(0,0,0,.65);
+    animation:crtflick 3.7s infinite}
+  #screen .sface::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(0deg,rgba(70,255,130,.07) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
+  #screen .sface::before{content:"";position:absolute;left:0;right:0;top:-6px;height:3px;pointer-events:none;
+    background:linear-gradient(90deg,transparent,rgba(190,255,214,.4),transparent);
+    animation:crtsweep 7s linear infinite}
+  @keyframes crtflick{0%,100%{opacity:1}92%{opacity:1}93%{opacity:.96}94%{opacity:1}}
+  @keyframes crtsweep{0%{top:-6px;opacity:0}2%{opacity:.6}18%{top:100%;opacity:.6}19%,100%{top:100%;opacity:0}}
+  @media (prefers-reduced-motion: reduce){#screen .sface,#screen .sface::before,#screen .leds i,#screen #mon-text::after{animation:none}
+    #screen #mon-text.help .hrow{animation:none;opacity:1;transform:none}}
+  #screen .msrc{font-family:Orbitron,var(--mono);font-weight:600;font-size:12.5px;letter-spacing:.2em;color:var(--crt);
+    text-shadow:0 0 8px var(--crt-glow);margin-bottom:9px}
+  #screen .msrc:empty{display:none}
+  #screen #mon-text{position:relative;font-size:11px;line-height:1.85;color:var(--crt);letter-spacing:.06em;text-transform:none;
+    text-shadow:0 0 6px var(--crt-glow)}
+  #screen #mon-text::after{content:"\2588";color:var(--crt);margin-left:3px;animation:curblink 1.1s steps(1) infinite}
+  @keyframes curblink{0%,55%{opacity:1}56%,100%{opacity:0}}
+  #screen #mon-text.help .hrow{display:flex;justify-content:space-between;gap:12px;padding:3.5px 0;
+    border-bottom:1px dotted rgba(70,255,130,.16);text-transform:uppercase;letter-spacing:.16em;font-size:10px;color:var(--crt-dim);
+    opacity:0;transform:translateY(5px);animation:rowin .28s forwards}
+  #screen #mon-text.help .hrow b{color:var(--crt);font-weight:400}
+  #screen #mon-text.help .hrow.demo{color:var(--crt);background:rgba(70,255,130,.08);border-bottom-color:rgba(70,255,130,.4)}
+  #screen #mon-text.help .hrow.demo b{text-shadow:0 0 10px var(--crt-glow)}
+  @keyframes rowin{to{opacity:1;transform:translateY(0)}}
   @media (max-width:760px){
     #sidepanel{right:0;bottom:auto;width:100%;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px;
       padding:10px 12px;border-right:none;border-bottom:1px solid rgba(255,178,74,.22)}
-    #pbrand{margin:0 10px 0 0}
-    #brandlogo{width:40px}
-    #pbrand .mark{font-size:12px}
-    #pbrand .sub{font-size:8px}
-    #pbrand .bar{display:none}
+    #pbrand{display:none !important}
     #sidenav{flex-direction:row;flex-wrap:wrap;gap:6px;margin-top:0}
     .pbtn{margin-bottom:0;padding:8px 10px}
-    .pbtn.splash{margin-bottom:0}
     #orient{display:none !important}
     #zoomkey{display:none !important}
-    #ticker{left:0;top:auto;bottom:0}
+    #screen{display:none !important}
+    #splashbtn{left:50%;transform:translateX(-50%);top:auto;bottom:14px}
   }
 
   .x{pointer-events:auto;cursor:pointer;color:var(--muted);font-size:15px;line-height:1;padding:4px 6px;border:1px solid rgba(255,178,74,.2)}
@@ -216,7 +250,7 @@
     #fw-scene{left:50%}
     .fwinspect{width:100%;border-left:none;border-top:1px solid rgba(255,178,74,.18)}
   }
-  #orient{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,178,74,.14)}
+  #orient{position:fixed;top:118px;right:24px;width:190px;z-index:40}
   #orient .ohead{font-size:8px;letter-spacing:.24em;color:var(--muted);margin-bottom:7px;text-align:center}
   #gizmo{width:140px;height:140px;margin:0 auto;border:1px solid rgba(255,178,74,.18);
     clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
@@ -239,34 +273,42 @@
 <div id="scan"></div>
 <div id="flash"></div>
 
-<div id="ticker"><div class="ttrack">
-  <span id="tick-a"></span><span id="tick-b" aria-hidden="true"></span>
-</div></div>
+<div id="pbrand">
+  <img id="brandlogo" src="assets/images/forge_outline.png" alt="FORGE">
+  <div class="btxt">
+    <div class="mark">F&middot;O&middot;R&middot;G&middot;E</div>
+    <div class="sub">posterior observatory</div>
+    <div class="bar"></div>
+  </div>
+</div>
+<a id="splashbtn" href="index.html"><span class="pn">&#8617;</span><span class="pt">BACK TO SPLASH</span></a>
 
 <aside id="sidepanel">
-  <div id="pbrand">
-    <img id="brandlogo" src="assets/images/forge_outline.png" alt="FORGE">
-    <div class="btxt">
-      <div class="mark">F&middot;O&middot;R&middot;G&middot;E</div>
-      <div class="sub">posterior observatory</div>
-      <div class="bar"></div>
+  <div id="screen">
+    <div class="bezel">
+      <div class="shead"><span class="mtag" id="mon-mode">// MONITOR &mdash; HELP</span><span class="leds"><i></i><i></i><i></i></span></div>
+      <div class="sface">
+        <div class="msrc" id="mon-src"></div>
+        <div id="mon-text" class="help"></div>
+      </div>
     </div>
   </div>
   <div id="sidenav"></div>
-  <div id="zoomkey">
-    <div class="zrow">
-      <span class="zlab"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><line x1="10.1" y1="10.1" x2="14.6" y2="14.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>// ZOOM</span>
-      <span><b id="z-val">68%</b></span>
-    </div>
-    <div class="ztrack"><div id="zfill"></div></div>
-    <div class="zends"><span>OUT</span><span>IN</span></div>
-  </div>
-  <div id="orient">
-    <div class="ohead">// DECK ORIENTATION</div>
-    <div id="gizmo"></div>
-    <div class="oread"><span>AZ <b id="o-az">000&deg;</b></span><span>EL <b id="o-el">+00&deg;</b></span></div>
-  </div>
 </aside>
+
+<div id="zoomkey">
+  <div class="zrow">
+    <span class="zlab"><svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><line x1="10.1" y1="10.1" x2="14.6" y2="14.6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>// ZOOM</span>
+    <span><b id="z-val">65%</b></span>
+  </div>
+  <div class="ztrack"><div id="zfill"></div></div>
+  <div class="zends"><span>OUT</span><span>IN</span></div>
+</div>
+<div id="orient">
+  <div class="ohead">// DECK ORIENTATION</div>
+  <div id="gizmo"></div>
+  <div class="oread"><span>AZ <b id="o-az">000&deg;</b></span><span>EL <b id="o-el">+00&deg;</b></span></div>
+</div>
 
 <!-- pixel-grid editor (bottom-right) -->
 <div id="dock">
@@ -335,15 +377,42 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
   const C={void:0x070402,base:0xffb24a,dim:0x6b3a12,hot:0xffe9c8,accent:0xff4d2e};
   const PAL={base:C.base,accent:C.accent,hot:C.hot,dim:C.dim};
   const SNAP_DUR=0.5, SPIN_DUR=0.9;                                     // hover snap / key-select sweep
-  const DEFAULT_RAD=22, DIVE_RAD=4.2;                                   // normal zoom (68% on the key) / boot dive — flame fills frame
+  const DEFAULT_RAD=23.7, DIVE_RAD=4.2;                                 // normal zoom (65% on the key) / boot dive — flame fills frame
   const REST_PHI=(90-17)*Math.PI/180, BOOT_PHI=Math.PI/2;               // standard view: EL +17° / boot starts level with the flame
-  const BOOT_HOLD=1.0, BOOT_ZOOM_DUR=1.8;                               // boot: hold at dive, then pull out
+  const BOOT_HOLD=1.2, BOOT_ZOOM_DUR=2.0;                               // boot: hold at dive, then pull out over the flat disk
+  const RINGPOP_DUR=1.0, RINGPOP_STAGGER=0.25;                          // disks pop to their tiers (tilted rings trail)
+  const RINGPOP_T0=BOOT_HOLD+BOOT_ZOOM_DUR;                             // pop starts when the camera lands
+  const PRINT_DUR=3.2;                                                  // then: one beam revolution prints the elements
+  const DEMO_ZOOM_DUR=1.1, DEMO_TUMBLE_DUR=1.5;                         // boot outro: control demo (teaches scroll + drag)
+  const DEMO_ZOOM_DEPTH=6.5, DEMO_SWING=0.85, DEMO_DIP=0.30;
   let theta=0.7,phi=REST_PHI,rad=DEFAULT_RAD,dragging=false,lx=0,ly=0,downXY=null;   // camera state (deep link may set theta)
   let SPIN=null;                                                        // auto-spin: {from,to,t0,dur,cb,snap}
   let ZOOM=null;                                                        // auto-zoom: {from,to,t0,dur,hold}
+  let NAVHOLD=-1;                                                       // plate index held front by panel hover (-1 = none)
+  let DEMO=null;                                                        // boot outro control demo: {t0,th0?}
   const PULSES=[]; let alertBusy=false;
   const EDGE={container:'#2DD4FF',preview:'#FFC857',external:'#37E08B'};
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- boot phases: flat Saturn disk → tier pop → projection print ---- */
+  const RETURNING=new URLSearchParams(location.search).has('model');    // backlinks from FORGE/FIDGET carry ?model=
+  let bootPrintActive=!reduce&&!RETURNING;   // boot plays splash→deck only; returns land on the finished deck
+  let PRINT=null;                       // {t0,dur} — print sweep clock (t-space)
+  const PRINTS=[], RINGPOP=[];
+  function normB(a){ a%=Math.PI*2; if(a<0)a+=Math.PI*2; if(a===0)a=Math.PI*2; return a; }
+  function regPrint(obj,bearing,kind){
+    const p={obj,bearing:normB(bearing),kind,born:false,bt:0,mat:kind==='band'?obj.material:null};
+    if(bootPrintActive){ obj.visible=false;
+      if(kind==='hex')obj.scale.setScalar(0.05);
+      if(kind==='band')p.mat.opacity=0;
+    } else p.born=true;
+    PRINTS.push(p);
+  }
+  function regRing(m,tilt){             // rings stay VISIBLE but flat (y=0, untilted) until the pop
+    const rp={obj:m,y1:m.position.y,r1:(tilt!==undefined?tilt:null),delay:(tilt!==undefined?RINGPOP_STAGGER:0)};
+    RINGPOP.push(rp);
+    if(bootPrintActive){ m.position.y=0; if(rp.r1!==null)m.rotation.x=0; }
+    return m; }
 
   /* ---- the four models — primary source: assets/js/stub.js registry.
          Inline mirror keeps the deck alive if stub.js is absent (standalone open). ---- */
@@ -430,8 +499,8 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
   [{y:3.4,set:[[5.6,.04,.5],[6.4,.018,.28],[4.6,.02,.22]]},
    {y:0,set:[[7.4,.05,.55],[8.5,.02,.3],[6.2,.02,.26],[9.3,.012,.16]]},
    {y:-3.4,set:[[5.6,.04,.5],[6.4,.018,.28],[4.6,.02,.22]]}].forEach(d=>{
-    d.set.forEach(([r,tb,o])=>world.add(ring(r,tb,C.base,o,d.y))); world.add(circle(d.set[0][0]+0.35,C.base,0.10,d.y)); });
-  [[-0.5,7.8,C.base,.14],[0.6,8.6,C.dim,.2]].forEach(([tilt,r,col,op])=>{const g=circle(r,col,op,0);g.rotation.x=tilt;world.add(g);});
+    d.set.forEach(([r,tb,o])=>world.add(regRing(ring(r,tb,C.base,o,d.y)))); world.add(regRing(circle(d.set[0][0]+0.35,C.base,0.10,d.y))); });
+  [[-0.5,7.8,C.base,.14],[0.6,8.6,C.dim,.2]].forEach(([tilt,r,col,op])=>{const g=circle(r,col,op,0);g.rotation.x=tilt;world.add(regRing(g,tilt));});
 
   /* the projector orb — kept */
   const core=glowSprite(C.hot,2.4,.55); world.add(core);
@@ -480,11 +549,14 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
     const halo=glowSprite(C.base,3.2,.42); halo.position.set(.3,.5,0); grp.add(halo);
     grp.lookAt(0,y,0); grp.rotateY(Math.PI);
     grp.userData={module,halo,target:0.9,online:false}; grp.scale.setScalar(0.9);
-    world.add(grp); hexNodes.push(grp);
-    world.add(dataBand(module.id,radius-1.4,y-0.1,0.9,angle-0.45,C.base));
+    world.add(grp); hexNodes.push(grp); regPrint(grp,angle,'hex');
+    const mb=dataBand(module.id,radius-1.4,y-0.1,0.9,angle-0.45,C.base);
+    world.add(mb); regPrint(mb,angle,'band');
   }
   MODULES.forEach((m,i)=>hexCluster(m,(i/MODULES.length)*Math.PI*2,(i%2===0?2.4:-2.4),6.6));
-  ['OBSERVE','CALIBRATE','SAMPLE','DIAGNOSE','PROJECT','IGNITE'].forEach((t,i)=>world.add(dataBand(t,8.4,0.2,0.8,(i/6)*Math.PI*2+0.1,C.dim)));
+  ['OBSERVE','CALIBRATE','SAMPLE','DIAGNOSE','PROJECT','IGNITE'].forEach((w,i)=>{
+    const b=dataBand(w,8.4,0.2,0.8,(i/6)*Math.PI*2+0.1,C.dim);
+    world.add(b); regPrint(b,(i/6)*Math.PI*2+0.5,'band'); });
 
   const pixelNodes=[];
   function pixelField(angle,y,radius,id){
@@ -495,7 +567,7 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
       m.position.set((gx-2)*.34,(gy-2)*.34,0); m.visible=on; grp.add(m); cells.push({mesh:m,on,baseOp}); }
     const plane=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.9),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false})); grp.add(plane);
     grp.position.set(Math.cos(angle)*radius,y,Math.sin(angle)*radius); grp.lookAt(0,y,0);
-    grp.userData={grid:true,id,cells,online:false}; world.add(grp); pixelNodes.push(grp);
+    grp.userData={grid:true,id,cells,online:false}; world.add(grp); pixelNodes.push(grp); regPrint(grp,angle,'grid');
   }
   for(let i=0;i<7;i++) pixelField((i/7)*Math.PI*2+0.3,(i%2?2.8:-2.8),7.6,'SHARD-'+String(i+1).padStart(2,'0'));
 
@@ -562,9 +634,9 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
       new THREE.MeshBasicMaterial({map:tex,transparent:true,opacity:.9,side:THREE.FrontSide,blending:THREE.AdditiveBlending,depthWrite:false}));
     plane.renderOrder=100; lift.add(plane);
     const brackets=makeBrackets(w*1.12,h*1.06,P.accent); brackets.position.z=0.05; brackets.renderOrder=100; lift.add(brackets);
-    slot.userData={plate:true,key:P.key,accent:P.accent,model:P,lift,plane,brackets,back,hover:false,active:false,clickT:-9};
+    slot.userData={plate:true,key:P.key,accent:P.accent,accentHex:new THREE.Color(P.accent).getHex(),model:P,lift,plane,brackets,back,hover:false,active:false,clickT:-9};
     plane.userData.slot=slot;
-    world.add(slot); platePanels.push(slot); plateMeshes.push(plane);
+    world.add(slot); platePanels.push(slot); plateMeshes.push(plane); regPrint(slot,angle,'plate');
   }
   function plateAngle(i){ return (i/PLATES.length)*Math.PI*2 + Math.PI/2; }
   function buildPlates(){ if(platePanels.length)return;
@@ -577,22 +649,33 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
     if(qi>=0){ theta=plateAngle(qi); platePanels[qi].userData.active=true; paintNav(); }
   }
 
-  /* ---- left command panel nav + instruction ticker ---- */
-  (function fillTicker(){
-    const txt='<b>HOVER A MODEL</b> \u2014 deck snaps to it \u25c6 <b>CLICK</b> \u2014 open [FIDGET]\u00b7[FORGE] \u25c6 '+
-      '<b>DRAG</b> \u2014 orbit \u25c6 <b>SCROLL</b> \u2014 zoom \u25c6 <b>CORE</b> \u2014 forge root \u25c6 '+
-      '<b>HEX NODES</b> \u2014 subsystem files \u25c6 <b>SHARD GRIDS</b> \u2014 bit-mask editor \u25c6 '+
-      '<b>KEYS 1\u20134</b> \u2014 quick select \u25c6 <b>ESC</b> \u2014 close \u25c6&nbsp;';
-    const a=document.getElementById('tick-a'), b=document.getElementById('tick-b');
-    if(a)a.innerHTML=txt; if(b)b.innerHTML=txt;
-  })();
+  /* ---- monitor screen: green cathode — HELP rows scroll in, facts type on ---- */
+  const monMode=document.getElementById('mon-mode'), monSrc=document.getElementById('mon-src'), monText=document.getElementById('mon-text');
+  let TYPE=null;                                                  // {el,text,i,t0,cps}
+  function typeInto(el,text,cps){ if(reduce){ el.textContent=text; TYPE=null; return; }
+    TYPE={el,text,i:0,t0:t,cps:cps||55}; el.textContent=''; }
+  const HELP_ROWS=[['SCROLL','zoom'],['DRAG','grab / spin'],['LEFT PANEL','select a model'],
+    ['HEX / SHARD','deck log'],['CORE','forge root'],['KEYS 1\u20134','quick select'],['ESC','close']];
+  function monitorHelp(){ TYPE=null;
+    monMode.textContent='// MONITOR \u2014 HELP';
+    monSrc.textContent='';
+    monText.className='help';
+    monText.innerHTML=HELP_ROWS.map((r,i)=>'<div class="hrow" style="animation-delay:'+(i*0.07).toFixed(2)+
+      's"><b>'+r[0]+'</b><span>'+r[1]+'</span></div>').join(''); }
+  function monitorFact(o){ const id=scanId(o);
+    const list=FACTS[id]||['\u2026']; const ix=(factIdx[id]||0)%list.length; factIdx[id]=ix+1;
+    monMode.textContent='// MONITOR \u2014 DECK LOG';
+    monSrc.textContent=o.userData.key?o.userData.model.name:id;   // monochrome cathode: no accent tint
+    monText.className='';
+    typeInto(monText,list[ix]); }
+  monitorHelp();
+  function demoRow(i){ if(!monText.classList.contains('help'))return;
+    const rows=monText.children;
+    for(let k=0;k<rows.length;k++)rows[k].classList.toggle('demo',k===i); }
+  function cancelDemo(){ if(!DEMO)return; DEMO=null; demoRow(-1); }
   const navBtns=[];
   (function buildNav(){
     const nav=document.getElementById('sidenav'); if(!nav)return;
-    const sp=document.createElement('div'); sp.className='pbtn splash';
-    sp.innerHTML='<span class="pn">\u21a9</span><span class="pt">BACK TO SPLASH</span>';
-    sp.addEventListener('click',()=>{location.href='index.html';});
-    nav.appendChild(sp);
     PLATES.forEach((P,i)=>{ const b=document.createElement('div'); b.className='pbtn';
       b.style.setProperty('--pc',P.accent);
       b.innerHTML='<span class="pn">0'+(i+1)+'</span><span class="pt">'+P.name+'</span>';
@@ -610,14 +693,87 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
     SPIN={from:theta,to:theta+d,t0:t,dur:snap?SNAP_DUR:SPIN_DUR,cb,snap:!!snap};
   }
   function navSnap(i){ const s=platePanels[i]; if(!s||folderOpen)return;   // popup backdrop blocks hover anyway
+    if(PRINT)finishPrint(); cancelDemo();
+    NAVHOLD=i;                                                    // hold this plate front while the hover lasts
     platePanels.forEach(p=>p.userData.hover=(p===s));
-    if(BEAM)BEAM.group.visible=false;
+    if(BEAM)aimBeam(s);                                           // center bulb projects onto the held panel
     spinToPlate(i,null,true);                                     // hover = snap to front (SNAP_DUR)
-    if(!reduce){                                                  // zoom settles to NORMAL (68% = DEFAULT_RAD), 0.5s
-      ZOOM={from:rad,to:DEFAULT_RAD,t0:t,dur:SNAP_DUR,hold:0}; }
+    if(reduce){ rad=DEFAULT_RAD; phi=REST_PHI; }                  // jump to standard view
+    else{                                                         // zoom -> normal 65% AND elevation -> +17°, 0.5s
+      ZOOM={from:rad,to:DEFAULT_RAD,t0:t,dur:SNAP_DUR,hold:0,phiFrom:phi,phiTo:REST_PHI}; }
   }
-  function navLeave(i){ const s=platePanels[i]; if(s)s.userData.hover=false; }
+  function navLeave(i){ const s=platePanels[i]; if(s)s.userData.hover=false;
+    NAVHOLD=-1;                                                   // release: deck animation resumes
+    if(BEAM&&s&&BEAM.cur===s)BEAM.group.visible=false;
+  }
+
+  /* ---- projection print: births + skip ---- */
+  function easeOutBack(x){ const c=1.70158; return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2); }
+  function birthPrint(p){ p.born=true; p.bt=t; p.obj.visible=true;
+    if(p.kind==='hex'){ p.obj.userData.target=0.9; if(BEAM)aimBeam(p.obj); }
+    else if(p.kind==='plate'||p.kind==='grid'){
+      p.obj.scale.setScalar(1); if(BEAM)aimBeam(p.obj);           // project the FINAL footprint…
+      p.obj.scale.setScalar(0.05); }                              // …then the pop grows into the light
+    const fl=glowSprite(0xffffff,0.9,.9); fl.position.copy(p.obj.position); fl.visible=false;
+    world.add(fl); PULSES.push({obj:fl,mat:fl.material,t0:t,dur:0.3,s0:0.4,s1:1.6,line:false});
+  }
+  function finishPrint(){ if(!PRINT&&!bootPrintActive)return;     // idempotent skip-to-final
+    PRINT=null; bootPrintActive=false;
+    RINGPOP.forEach(rp=>{ rp.obj.position.y=rp.y1; if(rp.r1!==null)rp.obj.rotation.x=rp.r1; });
+    PRINTS.forEach(p=>{ p.born=true; p.obj.visible=true;
+      if(p.kind==='plate'||p.kind==='grid')p.obj.scale.setScalar(1);
+      if(p.kind==='hex')p.obj.userData.target=0.9;
+      if(p.kind==='band')p.mat.opacity=0.85; });
+    if(BEAM)BEAM.group.visible=false;
+    nextScanT=t+4+Math.random()*6;                                // deck log waits a beat after boot
+  }
+
+  /* ---- deck log: aperiodic self-scan — the beam annotates the cylinder walls with fun facts.
+          FACTS maps hex subsystems, bit-mask shards, and model plates to their lines. ---- */
+  const FACTS={
+    LLLA:["LLLA refits the posterior in milliseconds \u2014 the \u03c4 knob re-tempers it live, no retraining."],
+    HMC:["G3 checks LLLA against full Hamiltonian Monte Carlo \u2014 R\u0302-gated, so bad chains can't lie."],
+    BUNDLES:["Genre ships as mk1 / mk2 / mk3 bundles (d = 384 / 512 / 768) \u2014 hot-swappable posteriors."],
+    GAUGES:["G1\u2013G4 condense the four tenets into needles: posterior, data-fraction, HMC fidelity, attribution."],
+    AUDIT:["GENERATE AUDIT freezes the session \u2014 gauges, graphs, seeds \u2014 into a shareable report."],
+    TELEMETRY:["Stage C is design-only: every number on this deck is theater. The pipes come later."],
+    'SHARD-01':["ATLAS LLP hunts displaced vertices \u2014 decays centimeters off the beamline, invisible to prompt triggers."],
+    'SHARD-02':["GTZAN is 999 tracks \u2014 one famously corrupted clip short of an even thousand."],
+    'SHARD-03':["PHONON DOS is E(3)-equivariant: rotate the crystal and the prediction rotates with it."],
+    'SHARD-04':["TUTORIAL runs palmer penguins \u2014 333 birds, 3 species, the friendliest dataset in ML."],
+    'SHARD-05':["FORGE = posterior observatory. Same model, two doors: FIDGET plays, FORGE interrogates."],
+    'SHARD-06':["\u03c4 tempers the posterior \u2014 crank it and watch certainty melt in real time."],
+    'SHARD-07':["SOLAR palette, locked: #ffb24a base \u00b7 #ff4d2e accent \u00b7 warm black void."],
+    llp:["1.2M events, 128-d latents, softmax over signal / background \u2014 the flagship search."],
+    genre:["BEARDOWN \u00b7 CNN + fusion over GTZAN \u2014 three bundle sizes, one leaderboard."],
+    phonon:["Gaussian likelihood over phonon densities of states \u2014 1,220 materials strong."],
+    tutorial:["A small MLP you can break on purpose \u2014 the forge-lite classroom."]
+  };
+  let SCAN=null, nextScanT=9+Math.random()*5, lastScanId=null; const SCAN_DWELL=6.0, factIdx={};
+  function deckIdle(){ return !PRINT && !bootPrintActive && !DEMO && !folderOpen && !gridActive && NAVHOLD<0 && !dragging && !SPIN; }
+  function scanId(o){ const u=o.userData; return u.module?u.module.id:(u.grid?u.id:u.key); }
+  function startScan(target){                                     // no target = auto-pick (deck-log attract)
+    if(SCAN)stopScan();
+    let o=target;
+    if(!o){ const pool=hexNodes.concat(pixelNodes,platePanels);
+      if(!pool.length)return;
+      let tries=0; do{ o=pool[(Math.random()*pool.length)|0]; }while(scanId(o)===lastScanId&&++tries<6); }
+    lastScanId=scanId(o);
+    if(o.userData.module){ o.userData.online=true; o.userData.target=1.08; }
+    if(o.userData.grid) o.userData.online=true;
+    if(BEAM)aimBeam(o);
+    monitorFact(o);
+    SCAN={obj:o,until:t+SCAN_DWELL};
+  }
+  function stopScan(){ if(!SCAN)return; const o=SCAN.obj; SCAN=null;
+    monitorHelp();
+    if(o.userData.module&&!folderOpen){ o.userData.online=false; o.userData.target=0.9; }
+    if(o.userData.grid&&!gridActive) o.userData.online=false;
+    if(BEAM&&BEAM.cur===o&&NAVHOLD<0)BEAM.group.visible=false;
+    nextScanT=t+6+Math.random()*8;                                // aperiodic: 6-14s to the next scan
+  }
   function navOpen(i){ const s=platePanels[i]; if(!s)return;      // plates land after fonts; ignore until then
+    if(PRINT)finishPrint(); cancelDemo();
     closeGrid(); if(folderOpen)closeFolders();
     clearPlates(); s.userData.active=true; paintNav();
     if(BEAM)BEAM.group.visible=false;
@@ -757,10 +913,11 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
   const target=new THREE.Vector3(0,0,0);
   function place(){ camera.position.set(target.x+rad*Math.sin(phi)*Math.cos(theta),target.y+rad*Math.cos(phi),target.z+rad*Math.sin(phi)*Math.sin(theta)); camera.lookAt(target); }
   const el=renderer.domElement; const ray=new THREE.Raycaster(), ptr=new THREE.Vector2();
-  el.addEventListener('pointerdown',e=>{SPIN=null;if(ZOOM){delete ZOOM.phiFrom;delete ZOOM.phiTo;}dragging=true;lx=e.clientX;ly=e.clientY;downXY=[e.clientX,e.clientY];el.setPointerCapture(e.pointerId);});
+  el.addEventListener('pointerdown',e=>{if(PRINT)finishPrint();cancelDemo();SPIN=null;if(ZOOM){delete ZOOM.phiFrom;delete ZOOM.phiTo;}dragging=true;lx=e.clientX;ly=e.clientY;downXY=[e.clientX,e.clientY];el.setPointerCapture(e.pointerId);});
   el.addEventListener('pointermove',e=>{ if(!dragging)return; theta+=(e.clientX-lx)*0.005; phi=Math.max(0.25,Math.min(Math.PI-0.25,phi-(e.clientY-ly)*0.005)); lx=e.clientX; ly=e.clientY; });
-  el.addEventListener('wheel',e=>{e.preventDefault();ZOOM=null;rad=Math.max(11,Math.min(60,rad+e.deltaY*0.02));},{passive:false});
+  el.addEventListener('wheel',e=>{e.preventDefault();if(PRINT)finishPrint();cancelDemo();ZOOM=null;rad=Math.max(11,Math.min(60,rad+e.deltaY*0.02));},{passive:false});
   el.addEventListener('pointermove',e=>{ if(dragging){ if(BEAM)BEAM.group.visible=false; return; }
+    if(PRINT)return;
     ptr.x=(e.clientX/innerWidth)*2-1; ptr.y=-(e.clientY/innerHeight)*2+1; ray.setFromCamera(ptr,camera);
     const hL=ray.intersectObjects(plateMeshes,false), hH=ray.intersectObjects(hexNodes,true), hP=ray.intersectObjects(pixelNodes,true);
     let best=null; const pk=a=>{ if(a.length&&(!best||a[0].distance<best.distance)) best=a[0]; };
@@ -780,11 +937,12 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
     if(best){ let g=best.object; while(g&&!(g.userData.module||g.userData.grid||g.userData.apparatus||g.userData.plate))g=g.parent;
       if(g){ if(g.userData.plate) fireAlert(g, ()=>openModeSelect(g));
         else if(g.userData.apparatus) fireAlert(null, ()=>openFolders('FORGE // ROOT',ROOTSET,null));
-        else if(g.userData.grid) fireAlert(g, ()=>openGrid(g));
-        else fireAlert(g, ()=>openFolders(g.userData.module.id, FOLDERSETS[g.userData.module.id]||[], g)); } }
+        else if(g.userData.grid) fireAlert(g, ()=>startScan(g));      // shard click -> fact in the monitor
+        else fireAlert(g, ()=>startScan(g)); } }                      // hex click -> fact in the monitor
     else { closeFolders(); closeGrid(); }
   });
   window.addEventListener('keydown',e=>{
+    if(PRINT)finishPrint(); cancelDemo();
     if(folderOpen){ if(e.key==='Escape')closeFolders();
       else if(windowMode==='select'){
         if(e.key==='ArrowLeft'||e.key==='ArrowRight'){ modeSel=1-modeSel; paintModes(); }
@@ -819,12 +977,35 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
                         : (pr<.5?4*pr*pr*pr:1-Math.pow(-2*pr+2,3)/2);   // easeInOutCubic
       theta=SPIN.from+(SPIN.to-SPIN.from)*e;
       if(pr>=1){ const cb=SPIN.cb; SPIN=null; if(cb)cb(); } }
-    if(!reduce && !dragging && !folderOpen && !gridActive && !SPIN) theta+=0.0012;   // idle spin; resumes on close
+    if(bootPrintActive){ RINGPOP.forEach(rp=>{                     // phase 3: disks pop up into 3d space
+      const pr=Math.min(1,Math.max(0,(t-RINGPOP_T0-rp.delay)/RINGPOP_DUR));
+      const e=easeOutBack(pr);
+      rp.obj.position.y=rp.y1*e;
+      if(rp.r1!==null)rp.obj.rotation.x=rp.r1*e; }); }
+    if(PRINT){ const pp=Math.min(1,Math.max(0,(t-PRINT.t0)/PRINT.dur));
+      const sweep=pp*Math.PI*2;
+      PRINTS.forEach(p=>{ if(!p.born&&p.bearing<=sweep+1e-6)birthPrint(p); });
+      PRINTS.forEach(p=>{ if(!p.born)return; const bp=(t-p.bt)/0.5;
+        if(bp<1){ if(p.kind==='plate'||p.kind==='grid')p.obj.scale.setScalar(Math.max(0.05,easeOutBack(Math.max(0,bp))));
+          else if(p.kind==='band')p.mat.opacity=0.85*Math.min(1,bp*1.25); }
+        else if(p.kind==='plate'||p.kind==='grid')p.obj.scale.setScalar(1); });
+      if(t-PRINT.t0>PRINT.dur+0.5)finishPrint(); }                // let the last birth finish its pop
+    if(DEMO){ const dd=t-DEMO.t0;
+      if(dd>=0){ if(DEMO.th0===undefined)DEMO.th0=theta;
+        if(dd<DEMO_ZOOM_DUR){ demoRow(0);                          // teach SCROLL: zoom breath
+          rad=DEFAULT_RAD-Math.sin(dd/DEMO_ZOOM_DUR*Math.PI)*DEMO_ZOOM_DEPTH; }
+        else if(dd<DEMO_ZOOM_DUR+DEMO_TUMBLE_DUR){ demoRow(1);     // teach DRAG: gimbal tumble-twist
+          const p2=(dd-DEMO_ZOOM_DUR)/DEMO_TUMBLE_DUR, s=Math.sin(p2*Math.PI);
+          rad=DEFAULT_RAD; theta=DEMO.th0+DEMO_SWING*s; phi=REST_PHI-DEMO_DIP*s; }
+        else { demoRow(-1); theta=DEMO.th0; phi=REST_PHI; rad=DEFAULT_RAD; DEMO=null; } } }
+    if(!reduce && !dragging && !folderOpen && !gridActive && !SPIN && NAVHOLD<0 && !PRINT && !DEMO) theta+=0.0012;   // idle spin; held while a panel is hovered
     place();
     world.rotation.y=Math.sin(t*0.05)*0.04; dust.rotation.y+=0.0006;
-    const ap=coreActive, pulse=0.85+Math.sin(t*(ap?3.2:1.6))*0.12;
+    const holdP=(NAVHOLD>=0&&platePanels[NAVHOLD])?platePanels[NAVHOLD]:null;
+    const ap=coreActive, pulse=0.85+Math.sin(t*(ap?3.2:(holdP?2.4:1.6)))*0.12;
     core.scale.set(3.2*pulse,3.2*pulse,1); coreInner.scale.setScalar(pulse);
-    core.material.color.setHex(ap?PAL.accent:PAL.hot); coreInner.material.color.setHex(ap?PAL.accent:PAL.hot);
+    const coreCol=ap?PAL.accent:(holdP?holdP.userData.accentHex:PAL.hot);
+    core.material.color.setHex(coreCol); coreInner.material.color.setHex(coreCol);
     if(emblem){ const ep=0.97+Math.sin(t*1.6)*0.03; emblem.scale.set(EW*ep,EH*ep,1); emblem.material.opacity=0.9+Math.sin(t*2)*0.06; }
     hexNodes.forEach(n=>{ n.scale.setScalar(n.scale.x+(n.userData.target-n.scale.x)*0.12); const onl=n.userData.online;
       n.userData.halo.material.opacity=(onl?0.7:0.4)+Math.sin(t*2+n.position.x)*0.08;
@@ -833,13 +1014,13 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
     pixelNodes.forEach(n=>{ const onl=n.userData.online; n.userData.cells.forEach(c=>{ if(!c.mesh.visible)return;
       c.mesh.material.color.setHex(onl?PAL.accent:PAL.base); c.mesh.material.opacity=Math.min(1,c.baseOp*(onl?1.25:1)); }); });
     platePanels.forEach(s=>{ const u=s.userData;
-      const base=u.active?1.18:(u.hover?1.10:1.0); let bump=0; const dt=t-u.clickT;
+      const base=u.active?1.26:(u.hover?1.16:1.0); let bump=0; const dt=t-u.clickT;
       if(dt>=0&&dt<0.5) bump=Math.sin(dt/0.5*Math.PI)*0.15; const sc=base+bump;
       u.lift.scale.setScalar(u.lift.scale.x+(sc-u.lift.scale.x)*0.18);
       const lz=(u.active||u.hover)?0.6:0; u.lift.position.z+=(lz-u.lift.position.z)*0.15;
       u.brackets.material.opacity=(u.active?0.95:(u.hover?0.85:0.42))+Math.sin(t*3+s.position.x)*0.05;
-      u.back.material.opacity=(u.active?0.4:(u.hover?0.32:0.16));
-      u.plane.material.opacity=(u.active||u.hover)?1.0:0.9; });
+      u.back.material.opacity=(u.active?0.34:(u.hover?0.28:0.16));
+      u.plane.material.opacity=(u.active||u.hover)?0.82:0.9; });
     if(gridUiInst&&gridActive) gridUiInst.tick(cBody,t);
     if(BEAM&&BEAM.group.visible){ const fl=0.38+Math.sin(t*14)*0.05+Math.sin(t*2.7)*0.04;
       BEAM.cone.material.opacity=fl; BEAM.rays.material.opacity=0.42+Math.sin(t*9)*0.12;
@@ -850,6 +1031,11 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
       if(pr>=1){ world.remove(P.obj); if(P.obj.geometry)P.obj.geometry.dispose(); P.mat.dispose(); PULSES.splice(i,1); continue; }
       const e=1-Math.pow(1-pr,2), s=P.s0+(P.s1-P.s0)*e; P.obj.scale.set(s,s,s);
       P.mat.opacity=(P.line?0.95:0.85)*(1-pr); P.mat.color.setHex(P.line?PAL.accent:PAL.hot); }
+    if(TYPE){ const n=Math.floor((t-TYPE.t0)*TYPE.cps);
+      if(n>TYPE.i){ TYPE.i=Math.min(n,TYPE.text.length); TYPE.el.textContent=TYPE.text.slice(0,TYPE.i);
+        if(TYPE.i>=TYPE.text.length)TYPE=null; } }
+    if(SCAN){ if(!deckIdle()||t>SCAN.until)stopScan(); }
+    else if(deckIdle()&&t>nextScanT)startScan();
     updateGizmo();
     renderer.render(scene,camera);
   }
@@ -965,9 +1151,12 @@ const FORGE_FLAME_B64='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAY
     setTimeout(()=>{ cb(); alertBusy=false; }, 300);
   }
   buildBeam();
-  /* ---- boot animation: open framed on the flame (level, z at dive), hold, pull out + crane to deck tilt ---- */
-  if(!reduce){ rad=DIVE_RAD; phi=BOOT_PHI;
-    ZOOM={from:DIVE_RAD,to:DEFAULT_RAD,t0:0,dur:BOOT_ZOOM_DUR,hold:BOOT_HOLD,phiFrom:BOOT_PHI,phiTo:REST_PHI}; }
+  /* ---- boot: (1) framed on the flame — flat disk edge-on behind it, (2) zoom out over the
+          Saturn disk, (3) disks pop to their tiers, (4) the orb prints the elements ---- */
+  if(!reduce&&!RETURNING){ rad=DIVE_RAD; phi=BOOT_PHI;
+    ZOOM={from:DIVE_RAD,to:DEFAULT_RAD,t0:0,dur:BOOT_ZOOM_DUR,hold:BOOT_HOLD,phiFrom:BOOT_PHI,phiTo:REST_PHI};
+    PRINT={t0:RINGPOP_T0+RINGPOP_DUR+RINGPOP_STAGGER,dur:PRINT_DUR};
+    DEMO={t0:RINGPOP_T0+RINGPOP_DUR+RINGPOP_STAGGER+PRINT_DUR+0.7}; }   // outro: control demo after the print
   place(); loop();
 })();
 </script>
