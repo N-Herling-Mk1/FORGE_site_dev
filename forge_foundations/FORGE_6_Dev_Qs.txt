@@ -1,0 +1,6 @@
+(1) What does this 'do?'- What does this 'measure?', What information does this convey?
+(2) What does this mean? What can a user glean from this metric?
+(3) What citations do we have for this?
+(4) What graphs can we make from this?
+(5) Is this feature capable of ui/ux interaction on FORGE?
+(6) How does it do it? Formulas.

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- FORGE build mk38 / 2026-07-27 -->
 <!-- FORGE — splash / threshold. Strike ENTER to ignite the forge and cross into the floor. -->
 <html lang="en">
 <head>
@@ -23,32 +24,16 @@
   #fx2{position:fixed;inset:0;z-index:6;pointer-events:none}  /* posterior layer, in front of the logo */
 
   /* logo: black background keyed out by screen blend, so the live flame shows through */
-  #logo{position:fixed;left:50%;top:46%;transform:translate(-50%,-50%);
-    width:min(420px,58vw);height:auto;mix-blend-mode:screen;pointer-events:none;z-index:5;
+  #logo{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);
+    width:min(500px,60vw);height:auto;mix-blend-mode:screen;pointer-events:none;z-index:5;
     filter:drop-shadow(0 0 22px rgba(45,212,255,.40)) drop-shadow(0 0 30px rgba(255,77,31,.34));
     transition:filter .25s, transform .25s, opacity .5s;}
 
   /* HUD */
   .hud{position:fixed;pointer-events:none;user-select:none;text-transform:uppercase;letter-spacing:.2em;z-index:6}
-  #brand{top:26px;left:30px;display:flex;align-items:center;gap:14px}
-  #brand .word{font-family:var(--disp);font-weight:900;font-size:18px;letter-spacing:.5em;
-    color:#eafbff;text-shadow:0 0 16px rgba(45,212,255,.55)}
-  #brand .word .o{color:var(--flame);text-shadow:0 0 16px rgba(255,122,13,.6)}
-  #brand .stack{display:flex;flex-direction:column;gap:6px}
-  #brand .sub{font-size:9px;color:var(--cyan-dim);letter-spacing:.32em}
-  #brand .bar{width:140px;height:1px;background:linear-gradient(90deg,var(--cyan),transparent)}
-
-  #status{top:26px;right:30px;text-align:right;font-size:9.5px;color:var(--cyan-dim);letter-spacing:.26em;line-height:2}
-  #status b{color:var(--amber);font-weight:400}
-  #status .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--flame);
-    box-shadow:0 0 8px var(--flame);margin-right:7px;vertical-align:middle;animation:blip 1.6s infinite}
-  @keyframes blip{0%,100%{opacity:.35}50%{opacity:1}}
-
-  #tagline{bottom:118px;left:0;right:0;text-align:center;font-family:var(--disp);font-weight:500;
-    font-size:12px;letter-spacing:.42em;color:rgba(180,210,225,.55)}
 
   /* phase rail (centred, under the plate) — a light progress stepper for the pipeline */
-  #rail{position:fixed;bottom:178px;left:50%;z-index:8;pointer-events:none;width:min(640px,92vw);
+  #rail{position:fixed;bottom:74px;left:50%;z-index:8;pointer-events:none;width:min(640px,92vw);
     opacity:0;transform:translateX(-50%) translateY(8px);transition:opacity .45s ease, transform .45s ease;
     font-family:var(--mono)}
   #rail.on{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -70,12 +55,11 @@
   @keyframes rpulse{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.8);opacity:0}}
 
   /* instruction / strike */
-  #strike{position:fixed;bottom:60px;left:0;right:0;text-align:center;z-index:6;pointer-events:none}
-  #strike .key{display:inline-flex;align-items:center;gap:14px;font-family:var(--disp);font-weight:700;
-    font-size:15px;letter-spacing:.34em;color:#eafbff;pointer-events:auto;cursor:pointer;
-    padding:13px 26px;border:1px solid rgba(45,212,255,.45);
+  #strike{position:fixed;bottom:clamp(150px,19vh,250px);left:0;right:0;text-align:center;z-index:6;pointer-events:none}
+  #strike .key{display:inline-flex;align-items:center;gap:20px;font-family:var(--disp);font-weight:700;
+    font-size:21px;letter-spacing:.30em;color:#eafbff;pointer-events:auto;cursor:pointer;
+    padding:21px 46px;border:2px solid rgba(45,212,255,.45);border-radius:0;
     background:linear-gradient(180deg,rgba(45,212,255,.10),rgba(45,212,255,.02));
-    clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);
     animation:breathe 2.4s ease-in-out infinite;text-shadow:0 0 14px rgba(45,212,255,.55);
     transition:transform .22s ease, filter .22s ease, background .22s ease, border-color .22s ease, color .22s, text-shadow .22s}
   #strike .key:hover{animation:none;color:#fff;
@@ -84,8 +68,10 @@
     transform:scale(1.07);text-shadow:0 0 30px rgba(255,96,30,.9);
     filter:saturate(2.4) brightness(1.5)
       drop-shadow(0 0 44px rgba(255,58,18,.70)) drop-shadow(0 0 16px rgba(255,180,60,.6))}
-  #strike .key:hover .glyph{color:#ffd27a}
-  #strike .glyph{font-size:18px;color:var(--cyan)}
+  #strike .key:hover .hmr{color:#ffd27a;transform:rotate(-24deg)}
+  #strike .hmr{width:30px;height:30px;flex:0 0 auto;color:var(--cyan);
+    transform-origin:64% 78%;transition:color .22s, transform .28s cubic-bezier(.34,1.56,.64,1)}
+  #strike .glyph{font-size:22px;color:var(--cyan)}
   @keyframes breathe{0%,100%{opacity:.62;border-color:rgba(45,212,255,.32)}
     50%{opacity:1;border-color:rgba(45,212,255,.72);box-shadow:0 0 24px rgba(45,212,255,.20)}}
 
@@ -109,10 +95,10 @@
   #floor button:hover{border-color:#FF7A0D;color:#b5560a}
 
   @media (max-width:640px){
-    #brand{left:16px;top:18px} #status{right:16px;top:18px} #brand .bar{width:90px}
-    #tagline{bottom:104px;font-size:10px;letter-spacing:.3em} #strike{bottom:46px}
+    #strike{bottom:15vh} #strike .key{font-size:16px;padding:16px 30px;gap:14px}
+    #strike .hmr{width:23px;height:23px}
   }
-  @media (prefers-reduced-motion:reduce){ #strike .key,#status .dot{animation:none} }
+  @media (prefers-reduced-motion:reduce){ #strike .key{animation:none} }
 </style>
 </head>
 <body>
@@ -120,22 +106,12 @@
   <canvas id="fx2"></canvas>
   <img id="logo" src="data:image/png;base64,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" alt="FORGE — P(theta given D)">
 
-  <div id="brand" class="hud">
-    <div class="stack">
-      <div class="word">F<span class="o">O</span>RGE</div>
-      <div class="sub">functional-posterior observatory</div>
-      <div class="bar"></div>
-    </div>
-  </div>
-
-  <div id="tagline" class="hud">FROM DATA, A POSTERIOR &mdash; STRUCK INTO SHAPE</div>
-
   <div id="rail">
     <div class="rtrack" id="rtrack"><div class="rfill" id="rfill"></div></div>
   </div>
 
   <div id="strike">
-    <span class="key"><span class="glyph">&#9211;</span> STRIKE TO IGNITE</span>
+    <span class="key"><svg class="hmr" viewBox="0 0 24 24" fill="none" aria-hidden="true"><g stroke="currentColor" fill="currentColor" stroke-linejoin="round" stroke-linecap="round"><path d="M10.9 7.4 L8.3 21.2" stroke-width="2.4" fill="none"/><path d="M3.0 2.9 L7.4 2.9 L7.4 9.3 L3.0 9.3 Z" stroke-width="1"/><path d="M7.4 3.6 L13.6 3.6 L20.9 5.7 L13.6 8.6 L7.4 8.6 Z" stroke-width="1"/></g></svg> STRIKE TO IGNITE</span>
   </div>
 
   <div id="grain"></div>
@@ -150,6 +126,7 @@
   </div>
 
 <script>
+console.log("%cFORGE splash build mk38 / 2026-07-27","color:#ffb24a;font-weight:700");
 (() => {
   "use strict";
   // ── wiring ──────────────────────────────────────────────────────────────
@@ -171,14 +148,31 @@
   const cv2 = document.getElementById("fx2");
   const ctx2 = cv2.getContext("2d");
   const logo  = document.getElementById("logo");
-  // crisp hero flame — the veneer that burns off. Falls back to old behavior if missing.
-  const heroImg = new Image(); let heroReady=false;
-  heroImg.onload = ()=>{ heroReady=true; };
+  // ── the hero flame ──────────────────────────────────────────────────────
+  // ONE crisp draw, plus ONE pre-blurred bloom layer at the SAME geometry.
+  // (The old lockup stacked an oversized additive copy on the sharp one, which
+  //  read as two-or-three overlapping flames. Same-geometry bloom cannot ghost.)
+  const heroImg = new Image(); let heroReady=false, heroAsp=0.732, bloomCv=null;
+  function buildBloom(){
+    if(!heroReady) return;
+    const S=76, sw=Math.max(8,Math.round(S*heroAsp));         // downscale…
+    const sm=document.createElement("canvas"); sm.width=sw; sm.height=S;
+    const sg=sm.getContext("2d"); sg.imageSmoothingQuality="high";
+    sg.drawImage(heroImg,0,0,sw,S);
+    const BW=480, BH=Math.round(BW/heroAsp);                  // …then up, smoothed = soft bloom
+    const c=document.createElement("canvas"); c.width=BW; c.height=BH;
+    const g=c.getContext("2d"); g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
+    try{ g.filter="blur(9px)"; }catch(_){}
+    g.drawImage(sm,0,0,BW,BH);
+    bloomCv=c;
+  }
+  heroImg.onload = ()=>{ heroReady=true; heroAsp=heroImg.width/heroImg.height; buildBloom(); resize(); };
   logo.style.opacity="0";                                    // the card waits under the veneer
   heroImg.src = "assets/images/forge_flame_hero.png";
   let strikePt = null;                                       // click point = ignition seed
   let voidCol = "#05030B";
-  let W=0,H=0,DPR=1, cx=0, cy=0, flameW=0, flameH=0, heatGrid=null, burnFronts=null, skRect=null, logoBox=null, heroBox=null, strikeHover=0;
+  let W=0,H=0,DPR=1, cx=0, cy=0, fcx=0, flameW=0, flameH=0, reticleR=0,
+      lock=null, burnFronts=null, skRect=null, heroBox=null, strikeHover=0, flameHover=0;
   function resize(){
     DPR = Math.min(1.5, devicePixelRatio||1);
     W = innerWidth; H = innerHeight;
@@ -188,22 +182,93 @@
     cv2.width = W*DPR; cv2.height = H*DPR;
     cv2.style.width=W+"px"; cv2.style.height=H+"px";
     ctx2.setTransform(DPR,0,0,DPR,0,0);
-    cx = W/2; cy = H*0.46;
-    const logoW = Math.min(420, W*0.58);
+    cx = W/2; cy = H*0.44;
     voidCol = getComputedStyle(document.body).backgroundColor || voidCol;
-    flameW = logoW*1.42; flameH = logoW*1.72;
-    // the logo plate's on-screen box, pre-scaled to the finale scale (1.06) —
-    // the burn and its burning edge are confined to this.
-    const r = logo.getBoundingClientRect();
-    const lw = r.width||logoW, lh = r.height||logoW, s = 1.06;
-    logoBox = { x: cx - lw*s/2, y: cy - lh*s/2, w: lw*s, h: lh*s };
-    const HW=Math.min(780, W*0.84), HH=HW*0.23;              // the LOCKUP is the hero — large + central
-    heroBox = { x: cx-HW/2, y: cy-HH/2, w: HW, h: HH };
+    layoutLockup();
+    seedAmbient();
     buildBurn();
     skRect = null;                                          // recomputed lazily in the loop
   }
-  addEventListener("resize", resize); resize();
+
+  // ── LOCKUP layout: the flame is the hero and it is BIG; the wordmark rides
+  //    beside it. Everything downstream (burn box, reticle, plume) is derived. ──
+  const LK_WORD="F\u00B7O\u00B7R\u00B7G\u00B7E", LK_SUB="POSTERIOR OBSERVATORY";
+  function layoutLockup(){
+    const g=ctx2;
+    const measure=(ws,ss)=>{
+      g.save();
+      g.font="800 "+ws+"px Orbitron, 'Share Tech Mono', monospace";
+      try{ g.letterSpacing=(ws*0.30)+"px"; }catch(_){}
+      const wwd=g.measureText(LK_WORD).width;
+      g.font="600 "+ss+"px 'Share Tech Mono', monospace";
+      try{ g.letterSpacing=(ss*0.52)+"px"; }catch(_){}
+      const swd=g.measureText(LK_SUB).width;
+      try{ g.letterSpacing="0px"; }catch(_){}
+      g.restore();
+      return {wwd,swd};
+    };
+    // Two candidate layouts; take whichever yields the BIGGER flame. Wide screens
+    // land side-by-side, narrow/portrait ones stack the wordmark underneath.
+    const stackedFh = ()=>{
+      let w0=Math.min(W*0.088,46), s0=w0*0.40, mm=measure(w0,s0);
+      if(mm.wwd>W*0.90){ const k=(W*0.90)/mm.wwd; w0*=k; s0*=k; mm=measure(w0,s0); }
+      return Math.min(H*0.44, (W*0.66)/heroAsp, H*0.86 - w0*1.95 - w0*0.55);
+    };
+    const sideFh = ()=>{
+      const LW=Math.min(W*0.86,1720);
+      let f=Math.min(H*0.54, LW*0.46);
+      const mm=measure(f*0.20, f*0.08);
+      const tot=f*heroAsp + f*0.11 + Math.max(mm.wwd,mm.swd);
+      return tot>LW ? f*(LW/tot) : f;
+    };
+    const STACK = stackedFh() > sideFh();
+    let fh,fw,ws,ss,gap,m,boxW,boxH,fx,fy,tx,tmid;
+
+    if(STACK){
+      ws = Math.min(W*0.088, 46);                           // size the wordmark to the width first
+      ss = ws*0.40;
+      m  = measure(ws,ss);
+      if(m.wwd > W*0.90){ const k=(W*0.90)/m.wwd; ws*=k; ss*=k; m=measure(ws,ss); }
+      const textH = ws*1.95;
+      gap = ws*0.55;
+      fh  = Math.min(H*0.44, (W*0.66)/heroAsp, H*0.86-textH-gap);
+      fw  = fh*heroAsp;
+      boxW= Math.max(fw, m.wwd, m.swd);
+      boxH= fh + gap + textH;
+      lock={};
+      fx  = cx - fw/2;             fy = cy - boxH/2;
+      tx  = cx - m.wwd/2;          tmid = fy + fh + gap + ws*0.78;
+    } else {
+      const LWmax = Math.min(W*0.86, 1720);
+      fh = Math.min(H*0.54, LWmax*0.46);                    // flame height — the dominant element
+      fw = fh*heroAsp;  ws = fh*0.20;  ss = ws*0.40;  gap = fh*0.11;
+      m  = measure(ws,ss);
+      let total = fw+gap+Math.max(m.wwd,m.swd);
+      if(total>LWmax){                                      // scale the whole lockup to fit
+        const k=LWmax/total;
+        fh*=k; fw*=k; ws*=k; ss*=k; gap*=k;
+        m=measure(ws,ss); total=fw+gap+Math.max(m.wwd,m.swd);
+      }
+      boxW = fw+gap+Math.max(m.wwd,m.swd);
+      boxH = Math.max(fh, ws*2.0);
+      fx   = cx-boxW/2;            fy = cy-boxH/2 + (boxH-fh)/2;
+      tx   = cx-boxW/2+fw+gap;     tmid = cy;
+    }
+
+    lock={ fh,fw,ws,ss,gap, wwd:m.wwd, swd:m.swd, stack:STACK,
+           x:cx-boxW/2, y:cy-boxH/2, w:boxW, h:boxH, fx, fy, tx, tmid };
+    const pad=Math.max(20, fh*0.07);
+    heroBox={ x:lock.x-pad, y:lock.y-pad, w:lock.w+2*pad, h:lock.h+2*pad };
+    fcx     = fx + fw/2;                                    // the fire rises under the FLAME
+    flameW  = fw*1.32;
+    flameH  = fh;
+    reticleR= Math.max(lock.w*0.52, Math.min(W,H)*0.44);    // big reticle, framing the lockup
+  }
+  // NOTE: the first resize() runs at the BOTTOM of this script — it touches the
+  // ambient-ember pool, which is declared further down (temporal dead zone).
+  addEventListener("resize", resize);
   logo.addEventListener("load", resize);                    // re-anchor once the plate decodes
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(resize);   // re-measure once Orbitron lands
 
   // ── fire: soft rising particle plume (no bars) ──────────────────────────
   function gauss(){ // ~N(0,1), Box-Muller (cheap)
@@ -248,9 +313,9 @@
     const ox = gauss()*spread*(0.45 + 0.55*heat);
     const u = Math.max(-1,Math.min(1, ox/(flameW*0.5)));    // -1..1 for cyan→ember tint
     const side = (u+1)/2;
-    const baseY = cy + flameH*0.40;
+    const baseY = (lock ? lock.fy+lock.fh : cy+flameH*0.5) - flameH*0.04;
     fire.push({
-      x: cx + ox, y: baseY + Math.random()*6,
+      x: fcx + ox, y: baseY + Math.random()*6,
       vx: ox*0.004 + gauss()*0.10*(0.4+0.6*heat),
       vy: -(0.28 + Math.random()*(0.4 + 1.9*heat)),         // slow & low when smolder
       wob: Math.random()*6.283, wobS: 0.5+Math.random()*1.3,
@@ -260,14 +325,73 @@
     });
   }
 
-  // ── sparks: sparse, longer-lived embers riding the heat ─────────────────
+  // ── (5) ambient ember fall, inverted: a constant background burn where the
+  //    motes drift UP forever, like snow run backwards. Never gated on state. ──
+  const AMB=[];
+  const ambTarget = ()=> Math.round(Math.min(190, Math.max(40, (W*H)/11000)));
+  function newAmb(seeded){
+    return { x: Math.random()*W,
+             y: seeded ? Math.random()*H : H+10+Math.random()*60,
+             vy: -(0.10+Math.random()*0.40),
+             r: 0.8+Math.random()*2.2,
+             wob: Math.random()*6.283, wobS: 0.16+Math.random()*0.55, drift: 0.10+Math.random()*0.55,
+             tw: Math.random()*6.283, twS: 0.9+Math.random()*2.4,
+             a: 0.16+Math.random()*0.46,
+             c: mix(C.ember, C.gold, Math.random()) };
+  }
+  function seedAmbient(){ AMB.length=0; const n=ambTarget(); for(let i=0;i<n;i++) AMB.push(newAmb(true)); }
+  function drawAmbient(t, heat){
+    const want=ambTarget();
+    while(AMB.length<want) AMB.push(newAmb(false));
+    while(AMB.length>want) AMB.pop();
+    ctx.save(); ctx.globalCompositeOperation="lighter";
+    for(const p of AMB){
+      p.y += p.vy*(1+0.60*heat);
+      p.x += Math.sin(t*p.wobS+p.wob)*p.drift;
+      if(p.y<-14 || p.x<-40 || p.x>W+40){ Object.assign(p, newAmb(false)); continue; }
+      const tw=0.55+0.45*Math.sin(t*p.twS+p.tw);
+      const rr=p.r*(0.85+0.30*tw)*2.2;
+      ctx.globalAlpha=Math.min(1, p.a*tw*(0.60+0.40*heat));
+      ctx.drawImage(nearestSprite(p.c), p.x-rr, p.y-rr, rr*2, rr*2);
+    }
+    ctx.globalAlpha=1; ctx.restore();
+  }
+
+  // ── click sparks: hot, fast, gravity-fed streaks thrown off the strike ─────
+  const SPARK_CAP=560, sparks=[];
+  function burstSparks(x,y,n,pow){
+    for(let i=0;i<n && sparks.length<SPARK_CAP;i++){
+      const a=Math.random()*6.283, sp=(0.8+Math.random()*5.4)*pow;
+      sparks.push({ x, y, px:x, py:y,
+        vx:Math.cos(a)*sp, vy:Math.sin(a)*sp-1.2,
+        life:1, decay:0.009+Math.random()*0.022, w:0.8+Math.random()*1.6,
+        c: mix(mix(C.gold,[255,255,235],Math.random()*0.75), C.flame, Math.random()*0.45) });
+    }
+  }
+  function drawSparks(){
+    if(!sparks.length) return;
+    ctx.save(); ctx.globalCompositeOperation="lighter"; ctx.lineCap="round";
+    for(let i=sparks.length-1;i>=0;i--){
+      const p=sparks[i];
+      p.life-=p.decay; if(p.life<=0){ sparks.splice(i,1); continue; }
+      p.px=p.x; p.py=p.y;
+      p.vx*=0.962; p.vy=p.vy*0.962+0.085;                   // drag + gravity
+      p.x+=p.vx; p.y+=p.vy;
+      const a=Math.pow(p.life,1.25);
+      ctx.strokeStyle=rgba(p.c,a*0.95); ctx.lineWidth=p.w*(0.35+0.65*p.life);
+      ctx.beginPath(); ctx.moveTo(p.px,p.py); ctx.lineTo(p.x,p.y); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ── embers: sparse, longer-lived motes riding the burn fronts ───────────
   const embers = [];
   function spawnEmber(burst){
     if(embers.length>=EMBER_CAP) return;
     const u = gauss()*0.5;
     embers.push({
-      x: cx + u*flameW*0.42,
-      y: cy + flameH*0.34,
+      x: fcx + u*flameW*0.42,
+      y: (lock ? lock.fy+lock.fh*0.86 : cy+flameH*0.40),
       vx: u*0.25 + (Math.random()-0.5)*0.5,
       vy: -(0.7 + Math.random()*1.6) * (burst?2.4:1),
       life: 1, r: 1+Math.random()*2.0,
@@ -275,74 +399,8 @@
     });
   }
 
-  // ── inference resolve: 2D heatmap burn-in + prior & posterior curves ─────
-  // Shared plot geometry (also used to seed the burn-in data).
-  function plotGeo(){
-    const w = flameW*1.9, x0 = cx - w/2;
-    const amp = flameH*0.5, base = cy + flameH*0.20;
-    return {w,x0,amp,base};
-  }
 
-  // Precompute the Bayesian update: a prior and a likelihood that merge into a
-  // conjugate-correct posterior (precisions add, mean is precision-weighted),
-  // plus draws FROM that posterior for the final phase. Rebuilt on resize.
-  function buildHeat(){
-    if(!flameW) return;
-    const {w,x0,amp,base}=plotGeo();
-    const my = base - amp*0.42;
-
-    // prior and likelihood: asymmetric AND well separated, so they start with
-    // almost no overlap and the posterior only forms once they slide together
-    const prior = { mu: cx - w*0.17, sig: w*0.140 };      // broad, left-of-centre (shifted right)
-    const like  = { mu: cx + w*0.20, sig: w*0.085 };       // narrow, right
-    // conjugate update gives the width; force the mean to the centre (the logo's
-    // horizontal middle) so the posterior resolves symmetrically in front of it
-    const t0 = 1/(prior.sig*prior.sig), tL = 1/(like.sig*like.sig);
-    const post = { mu: cx, sig: 1/Math.sqrt(t0+tL) };
-    const pk = { prior:0.50, like:0.64, post:0.96 };       // visual peak heights (post tallest)
-
-    // shared bin grid; each bin carries all three heights
-    const nb=34, bw=w/nb, bins=[];
-    for(let b=0;b<nb;b++){
-      const bx=x0+(b+0.5)*bw;
-      bins.push({
-        bx,
-        hp: Math.exp(-0.5*((bx-prior.mu)/prior.sig)**2)*pk.prior,
-        hl: Math.exp(-0.5*((bx-like.mu )/like.sig )**2)*pk.like,
-        hq: Math.exp(-0.5*((bx-post.mu )/post.sig )**2)*pk.post,
-        bf: nb>1 ? b/(nb-1) : 0,
-      });
-    }
-
-    // burn-in cloud: explores wide (around the prior), converges on the posterior
-    const M=300, samples=[];
-    for(let i=0;i<M;i++){
-      const p=Math.random(), sp=p*p*(3-2*p);
-      const mx  = prior.mu + (post.mu-prior.mu)*sp;
-      const sgx = prior.sig*1.4*(1-sp) + post.sig*sp;
-      const sgy = amp*0.55*(1-sp) + amp*0.34*sp;
-      let y=my+gauss()*sgy; if(y>base) y=base-(y-base)*0.3;
-      samples.push({x: mx+gauss()*sgx, y, r:1.4+Math.random()*2.2, at:p, fl:Math.random()*6.28});
-    }
-
-    // walker chains: start spread near the prior, drift to the posterior mode
-    const chains=[], nC=3, steps=18;
-    for(let c=0;c<nC;c++){
-      const pts=[]; let px=prior.mu+gauss()*prior.sig*1.2, py=my+gauss()*amp*0.55;
-      for(let s=0;s<steps;s++){
-        const f=s/(steps-1);
-        px += (post.mu-px)*0.16 + gauss()*post.sig*(2.6*(1-f)+0.5);
-        py += (my-py)*0.16 + gauss()*amp*0.16*(2*(1-f)+0.3);
-        if(py>base) py=base-(py-base)*0.3;
-        pts.push({x:px,y:py, at:0.15 + f*0.7 + c*0.03});
-      }
-      chains.push(pts);
-    }
-
-    heatGrid = { bins, bw, samples, chains, my, prior, like, post };
-  }
-
-  // ── paper-burn fronts: irregular edges, confined to the logo plate ──
+  // ── paper-burn fronts: irregular edges, confined to the lockup plate ──
   function buildBurn(){
     if(!flameW || !heroBox) return;
     const b=heroBox, bcx=b.x+b.w/2, bcy=b.y+b.h/2, bdiag=Math.hypot(b.w,b.h);
@@ -379,204 +437,93 @@
     return 0.5+0.5*Math.tanh(n);
   }
 
-  // ── burning edge: the overlay has burned to the image; its rectangle stays alight ──
-  function drawBurningEdge(g, rect, k, t){
-    if(!rect || k<=0) return;
-    const {x,y,w,h}=rect, a=smooth(k);
-    g.save(); g.globalCompositeOperation="lighter";
-    // layered halo + hot inner line (no shadowBlur — stacked strokes)
-    const ring=(lw,col,al)=>{ g.lineWidth=lw; g.strokeStyle=rgba(col,al*a); g.strokeRect(x,y,w,h); };
-    ring(20, C.flame, 0.07); ring(13, C.ember, 0.13);
-    ring(7,  C.ember, 0.40); ring(2.4, C.gold, 0.72);
-    // flickering embers crawling the perimeter
-    const per=2*(w+h), step=15, n=Math.max(1,Math.floor(per/step));
-    for(let i=0;i<n;i++){
-      let d=((i*step)+ (t*40)%per)%per, px, py;            // slow crawl around the edge
-      if(d<w){ px=x+d; py=y; }
-      else if(d<w+h){ px=x+w; py=y+(d-w); }
-      else if(d<2*w+h){ px=x+w-(d-w-h); py=y+h; }
-      else { px=x; py=y+h-(d-2*w-h); }
-      const fl=0.55+0.45*Math.sin(t*16+i*1.7);
-      g.fillStyle=rgba(mix(mix(C.ember,C.gold,0.5+0.5*Math.sin(i+t*3)),[255,255,235],0.25),(0.4+0.5*fl)*a);
-      g.beginPath(); g.arc(px,py,1.6+2.4*fl,0,6.283); g.fill();
+  // ── the veneer: the brand LOCKUP (flame + F·O·R·G·E + sub) — the burn eats THIS,
+  //    revealing the P(theta|D) card beneath. ──
+  function drawLockup(g, jx, jy, aMul, glow, surge){
+    if(!lock) return;
+    const L=lock;
+    const fx=L.fx+jx, fy=L.fy+jy;
+
+    // A ── bloom: one pre-blurred layer, same geometry, additive. No ghost.
+    if(bloomCv){
+      const sp=L.fh*0.15;                                   // the glow spills past the art
+      g.save(); g.globalCompositeOperation="lighter";
+      g.globalAlpha=Math.min(1, aMul*(0.20+0.48*glow+0.34*surge));
+      g.drawImage(bloomCv, fx-sp*heroAsp, fy-sp, L.fw+2*sp*heroAsp, L.fh+2*sp);
+      g.restore();
     }
-    g.restore();
-  }
-
-  function drawInference(g, prog, t){
-    if(prog<=0 || !heatGrid) return;
-    const ctx = g;                                          // render onto the given canvas
-    const {w,x0,amp,base}=plotGeo();
-    const G=heatGrid, gap=Math.max(1,G.bw*0.12), bwid=G.bw-gap*2;
-    const sm=x=>x<=0?0:(x>=1?1:x*x*(3-2*x));
-
-    // ── continuous merge: both inputs slide toward the centre AND narrow onto the
-    //    posterior width, while the gold posterior grows in. One smooth motion. ──
-    const m = sm((prog-0.20)/0.34);                       // merge resolves early (0.20→0.54)
-    const pmu = G.prior.mu + (G.post.mu-G.prior.mu)*m;    // means converge
-    const lmu = G.like.mu  + (G.post.mu-G.like.mu )*m;
-    const psig= G.prior.sig + (G.post.sig-G.prior.sig)*m; // widths morph to the posterior
-    const lsig= G.like.sig  + (G.post.sig-G.like.sig )*m;
-    const shiftL = lmu - G.like.mu;                       // histogram screen translation
-    const merge = m;                                      // drives the rule fade-in
-    const priorVis = 1 - 0.92*sm((m-0.72)/0.28);          // fade only once essentially merged
-    const likeVis  = priorVis;
-    const postVis  = sm((m-0.10)/0.72);                   // posterior grows continuously with the merge
-
-    // baseline axis
-    ctx.save(); ctx.globalCompositeOperation="lighter";
-    ctx.strokeStyle=rgba([90,123,168],0.4); ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(x0,base); ctx.lineTo(x0+w,base); ctx.stroke(); ctx.restore();
-
-    // ── burn-in: walker chains (lines) + sample cloud (dots), converging ──
-    const burn = sm((prog-0.56)/0.42)*1.12;               // burn-in laid down AFTER the posterior resolves
-    ctx.save(); ctx.globalCompositeOperation="lighter"; ctx.lineWidth=1.4;
-    for(const pts of G.chains){
-      let prev=null;
-      for(const p of pts){
-        if(burn<p.at) break;
-        if(prev){ ctx.strokeStyle=rgba([210,232,250],0.36);
-          ctx.beginPath(); ctx.moveTo(prev.x,prev.y); ctx.lineTo(p.x,p.y); ctx.stroke(); }
-        ctx.fillStyle=rgba([240,248,255],0.85); ctx.fillRect(p.x-1.5,p.y-1.5,3,3);
-        prev=p;
-      }
-    }
-    ctx.restore();
-    ctx.save(); ctx.globalCompositeOperation="lighter";
-    for(const s of G.samples){
-      if(burn<s.at) continue;
-      const age=Math.min(1,(burn-s.at)/0.10);
-      const side=Math.max(0,Math.min(1,(s.x-x0)/w));
-      const flash=age<0.5?(0.5-age)/0.5:0;
-      const col=mix(mix(C.cyan,C.ember,side),[255,255,235],flash*0.8);
-      const tw=0.6+0.4*Math.sin(t*7+s.fl);
-      const a=(0.32+0.20*tw)*age, rr=s.r*(1+flash);
-      ctx.fillStyle=rgba(col,a); ctx.fillRect(s.x-rr,s.y-rr,rr*2,rr*2);
-    }
-    ctx.restore();
-
-    // draws a smooth gaussian curve (filled + stroked), revealed L→R.
-    // domain extends left to the gaussian's tail so a left-sitting curve (the
-    // prior) isn't clipped at the plot edge.
-    function curve(dist, peak, shift, color, alpha, drawProg, fillA){
-      const xL=Math.min(x0, dist.mu-3.6*dist.sig), xR=x0+w, span=xR-xL;
-      const N=170, end=Math.max(1,Math.floor(N*drawProg));
-      const X=i=>xL+(i/N)*span, Y=x=>base-peak*amp*Math.exp(-0.5*((x-dist.mu)/dist.sig)**2);
-      ctx.save(); ctx.globalCompositeOperation="lighter";
-      ctx.beginPath();
-      ctx.moveTo(X(0)+shift, base);
-      for(let i=0;i<=end;i++){ const x=X(i); ctx.lineTo(x+shift, Y(x)); }
-      ctx.lineTo(X(end)+shift, base); ctx.closePath();
-      ctx.fillStyle=rgba(color, fillA); ctx.fill();
-      ctx.beginPath();
-      for(let i=0;i<=end;i++){ const x=X(i); i?ctx.lineTo(x+shift,Y(x)):ctx.moveTo(x+shift,Y(x)); }
-      ctx.strokeStyle=rgba(color, alpha); ctx.lineWidth=2.4;
-      ctx.shadowColor=rgba(color,alpha*0.7); ctx.shadowBlur=8; ctx.stroke();
-      ctx.restore();
-    }
-
-    // A ── PRIOR: broad cyan curve that slides to centre AND narrows into the posterior ──
-    const priorDraw = sm(prog/0.16);
-    const ppeak = 0.52 + 0.34*m;                           // tightens → a touch taller as it merges
-    if(priorVis>0.01) curve({mu:pmu,sig:psig}, ppeak, 0, C.cyan, 0.75*priorVis, priorDraw, 0.10*priorVis);
-
-    // B ── LIKELIHOOD: ember histogram that slides in AND narrows toward the posterior ──
-    if(likeVis>0.01){
-      ctx.save(); ctx.globalCompositeOperation="lighter";   // additive → fuses with the prior
-      const invd = 1/(lsig*lsig) - 1/(G.like.sig*G.like.sig);
-      for(const bn of G.bins){
-        const grow=sm((prog-0.10 - bn.bf*0.06)/0.18);
-        const hl=bn.hl*Math.exp(-0.5*((bn.bx-G.like.mu)**2)*invd);   // live height as the width morphs
-        const h=hl*amp*grow; if(h<1) continue;
-        const x=bn.bx+shiftL-G.bw/2+gap;
-        ctx.fillStyle=rgba(mix(C.ember,C.flame,0.30),0.22*likeVis); ctx.fillRect(x,base-h,bwid,h);
-        ctx.strokeStyle=rgba(C.flame,0.85*likeVis); ctx.lineWidth=1; ctx.strokeRect(x,base-h,bwid,h);
-      }
-      ctx.restore();
-    }
-
-    // C ── POSTERIOR: gold product gaussian, growing continuously as the inputs merge ──
-    if(postVis>0.02){
-      curve(G.post, 0.96*postVis, 0, C.gold, 0.92*Math.min(1,postVis+0.10), 1, 0.20*postVis);
-      const fy=base-amp*0.5, fr=amp*(0.45+0.55*postVis);
-      ctx.save(); ctx.globalCompositeOperation="lighter";
-      const fg=ctx.createRadialGradient(G.post.mu,fy,0,G.post.mu,fy,fr);
-      fg.addColorStop(0,   rgba([255,255,242], 0.40*postVis));
-      fg.addColorStop(0.4, rgba(C.gold,        0.26*postVis));
-      fg.addColorStop(1,   rgba(C.flame, 0));
-      ctx.fillStyle=fg; ctx.beginPath(); ctx.arc(G.post.mu,fy,fr,0,6.283); ctx.fill();
-      ctx.restore();
-    }
-
-    // D ── the rule, fading in with the merge ──
-    ctx.save(); ctx.globalCompositeOperation="lighter";
-    ctx.font="600 13px 'Share Tech Mono', ui-monospace, monospace"; ctx.textAlign="center"; ctx.letterSpacing="1px";
-    ctx.fillStyle=rgba(C.gold,0.72*merge);
-    ctx.fillText("P(\u03B8|D)  \u221D  P(D|\u03B8) \u00B7 P(\u03B8)", cx, base+30);
-    ctx.restore();
-
-    // G ── legend (curve / bars / merged) ──
-    const la=sm(prog/0.28);
-    ctx.save(); ctx.globalCompositeOperation="lighter";
-    ctx.font="600 11px 'Share Tech Mono', ui-monospace, monospace"; ctx.textAlign="left"; ctx.letterSpacing="1.5px";
-    const lx=x0+6, ly=base-amp*1.18, row=17;
-    ctx.strokeStyle=rgba(C.cyanHot,0.9*la); ctx.lineWidth=2;
-    ctx.beginPath(); ctx.moveTo(lx,ly-3); ctx.lineTo(lx+15,ly-3); ctx.stroke();
-    ctx.fillStyle=rgba(C.cyanHot,0.85*la); ctx.fillText("PRIOR", lx+22, ly);
-    ctx.fillStyle=rgba(C.flame,0.9*la);
-    ctx.fillRect(lx,ly+row-7,4,7); ctx.fillRect(lx+6,ly+row-9,4,9); ctx.fillRect(lx+12,ly+row-6,4,6);
-    ctx.fillText("LIKELIHOOD", lx+22, ly+row);
-    ctx.fillStyle=rgba(C.gold,0.95*la); ctx.fillRect(lx,ly+row*2-9,15,4); ctx.fillText("POSTERIOR", lx+22, ly+row*2);
-    ctx.restore();
-  }
-
-  // ── the veneer: the brand LOCKUP (flame + F·O·R·G·E + sub), large + central,
-  //    on a void plate. The burn fronts erode THIS, revealing the card beneath. ──
-  function drawLockup(g, b, jx, jy, aMul, hover, surge){
-    const pad=b.h*0.06;
-    const fh=b.h*0.92, fw=heroReady ? fh*(heroImg.width/heroImg.height) : 0;
-    const fx=b.x+pad+jx, fy=b.y+(b.h-fh)/2+jy;
+    // B ── the flame: exactly ONE crisp draw
     if(heroReady){
-      g.globalCompositeOperation="lighter";
-      g.globalAlpha=aMul*(0.14+0.18*hover+0.28*surge);
-      g.drawImage(heroImg, fx-fw*0.06, fy-fh*0.06, fw*1.12, fh*1.12);
-      g.globalCompositeOperation="source-over"; g.globalAlpha=aMul;
-      g.drawImage(heroImg, fx, fy, fw, fh);
+      g.save(); g.imageSmoothingEnabled=true; g.imageSmoothingQuality="high";
+      g.globalAlpha=aMul;
+      g.drawImage(heroImg, fx, fy, L.fw, L.fh);
+      g.restore();
     }
-    const tx=b.x+pad+fw+b.h*0.26+jx, tcy=b.y+b.h/2+jy;
-    const word="F·O·R·G·E";
-    const ws=b.h*0.34, ss=b.h*0.145;
+    // C ── wordmark
+    const tx=L.tx+jx, tcy=L.tmid+jy;
+    g.save();
     g.textBaseline="alphabetic"; g.textAlign="left";
-    g.font="800 "+ws+"px Orbitron, 'Share Tech Mono', monospace";
-    try{ g.letterSpacing=(ws*0.34)+"px"; }catch(_){}
-    g.globalCompositeOperation="lighter"; g.globalAlpha=aMul*(0.35+0.30*hover+0.30*surge);
-    g.fillStyle="rgba(255,178,74,0.8)"; g.fillText(word, tx, tcy-b.h*0.06);
+    g.font="800 "+L.ws+"px Orbitron, 'Share Tech Mono', monospace";
+    try{ g.letterSpacing=(L.ws*0.30)+"px"; }catch(_){}
+    g.globalCompositeOperation="lighter"; g.globalAlpha=Math.min(1, aMul*(0.30+0.40*glow+0.30*surge));
+    g.fillStyle="rgba(255,178,74,0.85)"; g.fillText(LK_WORD, tx, tcy-L.ws*0.18);
     g.globalCompositeOperation="source-over"; g.globalAlpha=aMul;
-    g.fillStyle="#ffe9c8"; g.fillText(word, tx, tcy-b.h*0.06);
-    const ww=g.measureText(word).width;
-    g.font="600 "+ss+"px 'Share Tech Mono', monospace";
-    try{ g.letterSpacing=(ss*0.55)+"px"; }catch(_){}
-    g.fillStyle="rgba(217,185,140,0.85)";
-    g.fillText("POSTERIOR OBSERVATORY", tx, tcy+b.h*0.17);
-    const grd=g.createLinearGradient(tx,0,tx+ww,0);
+    g.fillStyle="#ffe9c8"; g.fillText(LK_WORD, tx, tcy-L.ws*0.18);
+    g.font="600 "+L.ss+"px 'Share Tech Mono', monospace";
+    try{ g.letterSpacing=(L.ss*0.52)+"px"; }catch(_){}
+    g.fillStyle="rgba(217,185,140,0.88)";
+    g.fillText(LK_SUB, tx, tcy+L.ws*0.52);
+    const grd=g.createLinearGradient(tx,0,tx+L.wwd,0);
     grd.addColorStop(0,"rgba(255,178,74,0.9)"); grd.addColorStop(1,"rgba(255,178,74,0)");
-    g.fillStyle=grd; g.fillRect(tx, tcy+b.h*0.26, ww, Math.max(1.5,b.h*0.012));
+    g.fillStyle=grd; g.fillRect(tx, tcy+L.ws*0.82, L.wwd, Math.max(1.6,L.ws*0.045));
+
+    // the FUSE: the rule catches off the flame and runs left → right.
+    // aMul gate keeps it single-strength — drawLockup also runs an additive pass.
+    if(fuseAmt>0 && aMul>=0.99){
+      const ry=tcy+L.ws*0.82, rh=Math.max(1.6,L.ws*0.045), hx=tx+L.wwd*fuseAmt;
+      g.save(); g.globalCompositeOperation="lighter";
+      const tg=g.createLinearGradient(tx,0,hx,0);              // burnt trail behind the head
+      tg.addColorStop(0.00,"rgba(255,105,15,0.40)");
+      tg.addColorStop(0.65,"rgba(255,165,60,0.80)");
+      tg.addColorStop(1.00,"rgba(255,255,240,1)");
+      g.fillStyle=tg; g.fillRect(tx, ry-rh*1.1, hx-tx, rh*3.2);
+      if(fuseAmt<1){                                            // the hot head
+        const R=rh*10, hg=g.createRadialGradient(hx, ry+rh*0.5, 0, hx, ry+rh*0.5, R);
+        hg.addColorStop(0.00,"rgba(255,255,246,0.95)");
+        hg.addColorStop(0.30,"rgba(255,190,90,0.55)");
+        hg.addColorStop(1.00,"rgba(255,110,18,0)");
+        g.fillStyle=hg; g.beginPath(); g.arc(hx, ry+rh*0.5, R, 0, 6.2832); g.fill();
+      }
+      g.restore();
+    }
     try{ g.letterSpacing="0px"; }catch(_){}
+    g.restore();
     g.globalAlpha=1;
   }
-  function drawVeneer(t, surge, hover, zap, breath){
-    if(!heroBox) return;
+  function drawVeneer(t, surge, glow, zap, breath, flare){
+    if(!heroBox || !lock) return;
     const b=heroBox, g=ctx2;
     g.save();
-    g.fillStyle=voidCol;                                     // seamless plate — the lockup floats on void
-    g.fillRect(b.x-2, b.y-2, b.w+4, b.h+4);
+    // The plate exists only so the BURN has something opaque to erode off the
+    // card. At rest it punches a visible rectangle through the reticle and the
+    // ember field — so draw it only once the burn is actually running.
+    if(IGNITE_MODE!=="flare" && state!=="idle"){
+      g.fillStyle=voidCol;
+      g.fillRect(b.x-2, b.y-2, b.w+4, b.h+4);
+    }
     const bs=1+0.008*breath+0.02*surge;                      // gentle breathing
     g.translate(b.x+b.w/2, b.y+b.h/2); g.scale(bs,bs); g.translate(-(b.x+b.w/2), -(b.y+b.h/2));
-    drawLockup(g, b, 0, 0, 1, hover, surge);
+    drawLockup(g, 0, 0, 1, glow, surge);
+    if(flare>0){                        // FLARE: catch (0-.35), HOLD (.35-.82), blow out
+      const fA=smooth(Math.min(1, flare/0.35));            // rises, then sits steady
+      g.globalCompositeOperation="lighter";
+      drawLockup(g, 0, 0, Math.min(1, fA*0.95), 1.4, 1);
+      g.globalCompositeOperation="source-over";
+    }
     if(zap>0){                                               // ZAP: jittered electric copies + white wash
       g.globalCompositeOperation="lighter";
-      for(let k=0;k<3;k++)
-        drawLockup(g, b, (Math.random()-0.5)*12*zap, (Math.random()-0.5)*12*zap, zap*(0.25+Math.random()*0.30), hover, surge);
+      for(let k=0;k<2;k++)
+        drawLockup(g, (Math.random()-0.5)*14*zap, (Math.random()-0.5)*14*zap, zap*0.28, glow, surge);
       g.globalCompositeOperation="source-over";
       g.globalAlpha=zap*0.5; g.fillStyle="#fff";
       g.fillRect(b.x-2, b.y-2, b.w+4, b.h+4); g.globalAlpha=1;
@@ -586,7 +533,7 @@
   // ── reticle + rings (HELIX console echo) ────────────────────────────────
   function drawFrame(t, glow){
     ctx.save(); ctx.globalCompositeOperation="lighter";
-    const R = flameW*0.96;
+    const R = reticleR;
     for(let k=0;k<2;k++){
       const r = R*(1+k*0.34) + Math.sin(t*0.6+k)*2;
       ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
@@ -611,11 +558,38 @@
 
   // ── state machine ───────────────────────────────────────────────────────
   let state="idle", t0=performance.now(), igniteAt=0, heat=0;
+  let fuseAt=0, fuseAmt=0, wipeAt=0, wipeAmt=0;
   let hover=0, mx=-99999, my=-99999;                       // proximity "charge" before ignition
   const flash = document.getElementById("flash");
   const strikeEl = document.getElementById("strike");
   const keyEl = document.querySelector("#strike .key");
-  const glyphEl = keyEl ? keyEl.querySelector(".glyph") : null;
+  const grainEl = document.getElementById("grain");
+  let keyWasHot = false, lastStrike = -1e9;   // a hammer strikes once per hover, not continuously
+  // The STRIKE FACE — the flat square end on the left, in the hammer's own
+  // viewBox units. Looked up fresh each call: restoring the button label
+  // replaces the <svg>, and a cached node would go stale and stop sparking.
+  // getScreenCTM carries the live CSS rotation, so this tracks the swing.
+  function hammerTip(){
+    const el = keyEl && keyEl.querySelector(".hmr");
+    if(!el || !el.getScreenCTM || typeof DOMPoint==="undefined") return null;
+    try{
+      const m=el.getScreenCTM(); if(!m) return null;
+      const p=new DOMPoint(3.0, 6.1).matrixTransform(m);
+      return (isFinite(p.x)&&isFinite(p.y)) ? {x:p.x, y:p.y} : null;
+    }catch(_){ return null; }
+  }
+  function hammerSparks(x, y, n, pow){
+    for(let i=0;i<n && sparks.length<SPARK_CAP;i++){
+      const flier=Math.random()<0.20;                       // a few long, fast ones carry the eye
+      const a=Math.random()*6.283, sp=(0.6+Math.random()*3.4)*pow*(flier?2.2:1);
+      sparks.push({ x:x+(Math.random()-0.5)*6, y:y+(Math.random()-0.5)*6, px:x, py:y,
+        vx:Math.cos(a)*sp, vy:Math.sin(a)*sp-(0.5+Math.random()*2.0),
+        life:1,
+        decay:(flier?0.007:0.016)+Math.random()*(flier?0.011:0.030),
+        w:(flier?1.1:0.7)+Math.random()*1.4,
+        c: mix(mix(C.gold,[255,255,235],Math.random()*0.85), C.flame, Math.random()*0.35) });
+    }
+  }
 
   // ── phase rail: a light progress stepper, lit as each pipeline phase runs ──
   const railEl = document.getElementById("rail");
@@ -648,6 +622,17 @@
     }
   }
 
+  // ── ignition mode ───────────────────────────────────────────────────────
+  //  "flare" — one press: sparks, the flame CATCHES, white-out, straight to the
+  //            floor. No card, no burn-through. Fast (~1.4s).
+  //  "burn"  — the old sequence: zap, the lockup burns away over 2s and reveals
+  //            the P(theta|D) card underneath, then crosses.
+  const IGNITE_MODE = "flare";
+  const FLARE_S     = 1.70;  // phase A — the flame catches and holds
+  const FUSE_S      = 0.45;  // phase B — the underline burns left → right
+  const WIPE_S      = 0.40;  // phase C — the fire sweeps the splash away
+  const AUTO_CROSS  = true;  // burn: cross automatically instead of asking for a 2nd press
+  const HOLD_MS     = 1000;  // burn: how long the revealed card holds first
   function ignite(px,py){
     if(state!=="idle") return;
     if(px!==undefined && heroBox){                              // clamp the seed into the lockup
@@ -655,18 +640,35 @@
       strikePt = { x: Math.max(b.x+inset, Math.min(b.x+b.w-inset, px)),
                    y: Math.max(b.y+inset, Math.min(b.y+b.h-inset, py)) };
     } else if(heroBox) strikePt = { x: heroBox.x+heroBox.w/2, y: heroBox.y+heroBox.h/2 };
-    buildBurn();                                                // re-seed fronts from the strike point
-    logo.style.opacity="1";                                     // the reveal target waits under the veneer
-    if(reduce){ state="held"; holdReveal(); updateRail(9); return; }
-    state="igniting"; igniteAt=performance.now();
     strikeEl.style.transition="opacity .3s"; strikeEl.style.opacity="0";
-    logo.style.transform="translate(-50%,-50%) scale(1.06)";
-    logo.style.filter="drop-shadow(0 0 40px rgba(255,184,0,.7)) drop-shadow(0 0 60px rgba(255,77,31,.6))";
+    igniteAt=performance.now();
+    // ── audio: the strike IS the user gesture, so this always gets to play.
+    //    The epoch stamp lets dash1 resume the same track at the right offset
+    //    and lets the terminal schedule ENTER onto the beat drop.
+    try{
+      sessionStorage.setItem("forgeAudioT0", String(Date.now()));
+      var A=new Audio("assets/audio/forge-boot.wav");
+      A.volume=0.9; window.__forgeAudio=A; A.play().catch(function(){});
+    }catch(_){}
+    if(IGNITE_MODE==="flare"){                                  // simple: set the flame, then go
+      state="flaring";
+      if(reduce){ crossNow(); return; }
+    } else {
+      buildBurn();                                              // re-seed fronts from the strike point
+      logo.style.opacity="1";                                   // the reveal target waits under the veneer
+      if(reduce){ state="held"; holdReveal(); updateRail(9); return; }
+      state="igniting";
+      logo.style.transform="translate(-50%,-50%) scale(1.06)";
+      logo.style.filter="drop-shadow(0 0 40px rgba(255,184,0,.7)) drop-shadow(0 0 60px rgba(255,77,31,.6))";
+    }
     for(let i=0;i<60;i++) spawnEmber(true);
     for(let i=0;i<70;i++) spawnFire(1);
+    burstSparks(strikePt.x, strikePt.y, 120, 1.5);              // sparks fly off the strike
+    setTimeout(()=>burstSparks(strikePt.x, strikePt.y, 70, 1.0), 90);
     if(navigator.vibrate) navigator.vibrate(40);
   }
-  function holdReveal(){                                        // burn done — full card holds, second input enters
+  function holdReveal(){                                        // burn done — the card holds
+    if(AUTO_CROSS){ setTimeout(crossNow, HOLD_MS); return; }
     strikeEl.style.transition="opacity .5s"; strikeEl.style.opacity="1";
     if(keyEl) keyEl.innerHTML='<span class="glyph">&#9166;</span> ENTER THE OBSERVATORY';
   }
@@ -675,11 +677,51 @@
     flash.style.opacity="1";
     setTimeout(cross, 320);
   }
+  // the sweep itself — a burning edge running right, dark behind it, so the
+  // hand-off lands on the (dark) deck instead of flashing white
+  function drawWipe(){
+    if(wipeAmt<=0) return;
+    const g=ctx2, x=W*wipeAmt, ew=Math.max(100, W*0.10);
+    g.save();
+    g.fillStyle=voidCol; g.fillRect(0, 0, Math.max(0,x-ew*0.20), H);
+    const eg=g.createLinearGradient(x-ew, 0, x+ew*0.14, 0);
+    eg.addColorStop(0.00,"rgba(255,90,10,0)");
+    eg.addColorStop(0.42,"rgba(255,120,20,0.50)");
+    eg.addColorStop(0.78,"rgba(255,190,90,0.92)");
+    eg.addColorStop(0.95,"rgba(255,255,246,1)");
+    eg.addColorStop(1.00,"rgba(255,255,246,0)");
+    g.globalCompositeOperation="lighter";
+    g.fillStyle=eg; g.fillRect(x-ew, 0, ew*1.14, H);
+    g.restore();
+  }
   function cross(){
     if(ENTER_TARGET){ location.href = ENTER_TARGET; return; }
     document.getElementById("floor").classList.add("show");
   }
-  document.getElementById("reignite").addEventListener("click", ()=>location.reload());
+  // Re-arm the splash. Also runs on bfcache restore: pressing Back from the
+  // deck would otherwise land on a page frozen in state "done" — no hover
+  // sparks, no ignite, nothing responding.
+  const KEY_HTML = keyEl ? keyEl.innerHTML : "";
+  function resetSplash(){
+    state="idle"; strikePt=null; burnFronts=null; igniteAt=0; keyWasHot=false;
+    fire.length=0; embers.length=0; sparks.length=0;
+    heat=0; hover=0; flameHover=0; strikeHover=0; skRect=null; lastStrike=-1e9;
+    fuseAt=0; fuseAmt=0; wipeAt=0; wipeAmt=0;
+    if(grainEl) grainEl.style.opacity="";
+    logo.style.opacity="0"; logo.style.mixBlendMode="screen";
+    logo.style.filter=""; logo.style.transform="translate(-50%,-50%)";
+    flash.style.transition="none"; flash.style.opacity="0";
+    requestAnimationFrame(()=>{ flash.style.transition="opacity .75s ease-out"; });
+    document.getElementById("floor").classList.remove("show");
+    strikeEl.style.transition="opacity .3s"; strikeEl.style.opacity="1";
+    if(keyEl) keyEl.innerHTML=KEY_HTML;
+    if(railEl){ railEl.classList.remove("on"); railShown=false; rfill.style.width="0%";
+      railNodes.forEach(n=>n.classList.remove("done","active")); }
+    resize();
+  }
+  window.__forgeReset = resetSplash;
+  document.getElementById("reignite").addEventListener("click", e=>{ e.stopPropagation(); resetSplash(); });
+  addEventListener("pageshow", e=>{ if(e.persisted) resetSplash(); });
 
   addEventListener("keydown", e=>{
     if(e.key==="Enter"||e.key===" "){ e.preventDefault();
@@ -700,7 +742,36 @@
     ctx.clearRect(0,0,W,H);
 
     // ignite progress (resolve → hold → overlay burns to the image edges → hold → cross)
-    let surge=0, post=0, fin=0, edge=0, zap=0, eIg=-1;
+    let surge=0, post=0, fin=0, edge=0, zap=0, flare=0, eIg=-1;
+    // ── FLARE mode runs three phases: the flame catches, the underline burns
+    //    left→right off it, then the fire wipes the screen. Everything is held
+    //    at full through "done" so nothing blanks out before the hand-off.
+    if(IGNITE_MODE==="flare" && state==="done"){ surge=1; flare=1; fuseAmt=1; wipeAmt=1; }
+    if(state==="flaring"){                                   // A: the flame catches
+      const e=(now-igniteAt)/1000;
+      surge = Math.min(1, e/0.55);
+      flare = Math.min(1, e/FLARE_S);
+      if(Math.random()<0.85) spawnEmber(true);
+      for(let i=0;i<3;i++) spawnFire(1);
+      if(e>=FLARE_S){ state="fusing"; fuseAt=now; }
+    }
+    if(state==="fusing"){                                    // B: the fuse runs the underline
+      surge=1; flare=1;
+      fuseAmt = Math.min(1, (now-fuseAt)/1000/FUSE_S);
+      for(let i=0;i<2;i++) spawnFire(1);
+      if(lock && fuseAmt<1){                                 // sparks shed off the moving head
+        const hx=lock.tx + lock.wwd*fuseAmt,
+              hy=lock.tmid + lock.ws*0.82 + Math.max(1.6, lock.ws*0.045)*0.5;
+        hammerSparks(hx, hy, 5, 0.85);
+      }
+      if(fuseAmt>=1){ state="wiping"; wipeAt=now; }
+    }
+    if(state==="wiping"){                                    // C: the sweep
+      surge=1; flare=1; fuseAmt=1;
+      wipeAmt = Math.min(1, (now-wipeAt)/1000/WIPE_S);
+      if(Math.random()<0.9) hammerSparks(W*wipeAmt-6, Math.random()*H, 3, 1.0);
+      if(wipeAmt>=1 && state!=="done"){ state="done"; cross(); }
+    }
     if(state==="igniting"||state==="held"){
       const e = eIg = (now-igniteAt)/1000;
       surge = Math.min(1, e/0.6);                          // flame roars up fast
@@ -710,7 +781,7 @@
       edge  = Math.min(1, Math.max(0,(e-1.95)/0.4));       // plate edge catches as the burn lands
       if(state==="igniting" && fin>=1){ state="held"; holdReveal(); }   // reveal holds — second input enters
       if(state==="igniting" && Math.random()<0.9) spawnEmber(true);
-      updateRail(Math.min(e, 2.4));
+      if(IGNITE_MODE!=="flare") updateRail(Math.min(e, 2.4));
     }
     const breath = reduce?0.5:(0.5+0.5*Math.sin(t*1.4));
 
@@ -722,8 +793,18 @@
     }
     hover += (hoverTarget - hover) * 0.08;
 
+    // FLAME hover — pointer over the flame itself makes it glow hard
+    let fhTarget = 0;
+    if(state==="idle" && lock){
+      const L=lock, fmx=L.fx+L.fw/2, fmy=L.fy+L.fh/2;
+      const ex=Math.abs(mx-fmx)/(L.fw*0.82), ey=Math.abs(my-fmy)/(L.fh*0.60);
+      fhTarget = Math.max(0, 1-Math.max(ex,ey));
+    }
+    flameHover += (fhTarget - flameHover) * 0.14;
+    const glow = Math.min(1.4, hover*0.35 + flameHover*1.15);   // what drives the lockup bloom
+
     // heat ramps from a low idle smolder up to full fire once struck (charge lifts the smolder)
-    const heatTarget = (state==="idle") ? (0.08 + 0.40*hover) : 1;
+    const heatTarget = (state==="idle") ? (0.08 + 0.26*hover + 0.46*flameHover) : 1;
     heat += (heatTarget - heat) * (state==="idle" ? 0.04 : 0.05);
     const dim = (1 - 0.5*post*(1-fin)) + 0.5*fin;            // flame recedes for the result, then surges back
 
@@ -735,15 +816,20 @@
        +`drop-shadow(0 0 ${(30+70*hover)|0}px rgba(255,77,31,${(0.34+0.50*hover).toFixed(2)}))`;
     }
 
-    // ENTER key: native :hover does the blue→magma morph; JS just sheds embers off it
-    if(!skRect && keyEl) skRect = keyEl.getBoundingClientRect();
+    // STRIKE key: native :hover does the blue→magma morph and cocks the hammer
+    // back; the tip throws sparks as it drops.
     const keyHot = (state==="idle" && keyEl && keyEl.matches(":hover"));
     strikeHover += ((keyHot?1:0) - strikeHover) * 0.15;
-    if(keyHot && skRect && strikeHover>0.4 && embers.length<EMBER_CAP && Math.random()<strikeHover*0.5){
-      embers.push({x:skRect.left+Math.random()*skRect.width, y:skRect.top+skRect.height*0.45,
-        vx:(Math.random()-0.5)*0.6, vy:-0.8-Math.random()*0.9, life:1, r:1.4+Math.random()*2.1,
-        c:mix(C.flame,C.gold,Math.random())});
+    // ONE strike per hover: the swing throws a shower, the landing throws a
+    // second 115ms later, then it stops. No trickle — this is a hammer.
+    // The cooldown keeps a cursor jittering across the edge from machine-gunning.
+    if(keyHot && !keyWasHot && (now-lastStrike) > 450){
+      lastStrike = now;
+      const tp=hammerTip(); if(tp) hammerSparks(tp.x, tp.y, 120, 1.55);
+      setTimeout(()=>{ const q=hammerTip();
+        if(q && state==="idle" && keyEl && keyEl.matches(":hover")) hammerSparks(q.x, q.y, 80, 1.2); }, 115);
     }
+    keyWasHot = keyHot;
 
     const burnProg = smooth(Math.min(1, fin/0.92));         // drives the paper burn-off
 
@@ -757,16 +843,18 @@
        +`drop-shadow(0 0 ${(46+120*burnProg+40*edge)|0}px rgba(255,77,31,${glow.toFixed(2)}))`;
     }
 
-    drawFrame(t, surge + hover*0.5);
+    drawFrame(t, surge + hover*0.5 + flameHover*0.5);
+    drawAmbient(t, heat);                                    // (5) the constant background burn
 
     // ── heat body: soft breathing flame aura (cool-left, hot-right) ──
     ctx.save(); ctx.globalCompositeOperation="lighter";
     const heatGlow = (0.10 + 0.90*heat) * dim;               // faint low glow when smoldering
     const dxk = 0.4 + 0.6*heat;                              // lobes tighten when cold
-    const by = cy + flameH*(0.30 - 0.24*heat);               // glow sits low until struck
+    const fmid = lock ? lock.fy+lock.fh*0.52 : cy;
+    const by = fmid + flameH*(0.26 - 0.22*heat);             // glow sits low until struck
     const rad = flameH*(0.18 + 0.34*heat)*(0.92+0.16*breath+surge*0.45);
     function aura(dx, col, a){
-      ctx.save(); ctx.translate(cx+dx, by); ctx.scale(0.60, 1.5);
+      ctx.save(); ctx.translate(fcx+dx, by); ctx.scale(0.60, 1.5);
       const g=ctx.createRadialGradient(0,0,0,0,0,rad);
       g.addColorStop(0, rgba(col,a)); g.addColorStop(.55, rgba(col,a*0.30)); g.addColorStop(1, rgba(col,0));
       ctx.fillStyle=g; ctx.beginPath(); ctx.arc(0,0,rad,0,6.283); ctx.fill(); ctx.restore();
@@ -811,16 +899,18 @@
       ctx.beginPath(); ctx.arc(p.x,p.y,p.r*p.life,0,Math.PI*2); ctx.fill();
     }
     ctx.restore();
-    if(state==="idle"){
-      const cap = 14 + (hover*42|0);
-      if(embers.length<cap && Math.random() < 0.10+0.5*hover) spawnEmber(false);
-    }
+    drawSparks();
 
     // ── posterior layer, drawn on the canvas IN FRONT of the logo ──
     ctx2.clearRect(0,0,W,H);
-    const frozen = burnProg>=1 || state==="held" || state==="done";
+    if(wipeAmt>0 && grainEl) grainEl.style.opacity=String(1-wipeAmt);  // no vignette over the sweep
+    // In flare mode the veneer must keep drawing through "done" — otherwise the
+    // canvas clears the instant we cross and the frame blanks out under a
+    // half-faded flash overlay.
+    const frozen = burnProg>=1 || state==="held" ||
+                   (state==="done" && IGNITE_MODE!=="flare");
     if(!frozen){
-      drawVeneer(t, surge, hover, zap, breath);              // plate + brand lockup — the thing that burns
+      drawVeneer(t, surge, Math.max(glow, flare*1.5), zap, breath, flare);
 
       // ── the burn: fronts erode the lockup, revealing the P(θ|D) card beneath ──
       if(burnProg>0 && heroBox){
@@ -878,8 +968,10 @@
       }
     }
 
+    drawWipe();                     // last thing painted — it covers everything
     requestAnimationFrame(frame);
   }
+  resize();                       // first layout — everything above is declared by now
   requestAnimationFrame(frame);
 })();
 </script>
